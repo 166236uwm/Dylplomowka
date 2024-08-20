@@ -1,0 +1,6 @@
+@Magazyn_HostAddress = http://localhost:5140
+
+GET {{Magazyn_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

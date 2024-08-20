@@ -1,14 +1,14 @@
 public class Item
 {
-    public int Id { get; set; }            // Unikalny identyfikator towaru (primary key)
-    public string Name { get; set; }       // Nazwa towaru
-    public int LocationId { get; set; }    // Id lokalizacji, gdzie towar jest przechowywany (foreign key)
-    public float DefaultUnitSize { get; set; }  // Domyślny rozmiar jednostki towaru
-    public string Unit { get; set; }       // Jednostka miary (np. "kg", "szt")
-    public int CurrentStock { get; set; }  // Aktualny stan magazynowy
-    public int ReorderThreshold { get; set; }  // Próg, poniżej którego generowane jest zamówienie
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int LocationId { get; set; }
+    public float DefaultUnitSize { get; set; }
+    public string Unit { get; set; }
 
-    // Relacje
-    public Location Location { get; set; }    // Lokalizacja, gdzie towar jest przechowywany
-    public ICollection<DeliveredItem> DeliveredItems { get; set; }  // Kolekcja dostarczonych towarów
+    // Właściwości nawigacyjne
+    public Location Location { get; set; }
+    public ICollection<DeliveredItem> DeliveredItems { get; set; }
+    public ICollection<ShipmentItem> ShipmentItems { get; set; }
+    public ICollection<InventoryCheckItem> InventoryCheckItems { get; set; }
 }

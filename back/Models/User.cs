@@ -1,13 +1,15 @@
 public class User
 {
-    public int Id { get; set; }           // Unikalny identyfikator użytkownika (primary key)
-    public string Username { get; set; }  // Nazwa użytkownika (login)
-    public string Name { get; set; }      // Imię użytkownika
-    public string Surname { get; set; }   // Nazwisko użytkownika
-    public string Email { get; set; }     // Email użytkownika
-    public string Role { get; set; }      // Rola użytkownika (np. "Admin", "Manager", "Magazynier")
-    public DateTime CreatedAt { get; set; }  // Data utworzenia konta użytkownika
+    public int Id { get; set; }
+    public string Username { get; set; }
+    public string Name { get; set; }
+    public string Surname { get; set; }
+    public string Email { get; set; }
+    public string Role { get; set; }
+    public DateTime CreatedAt { get; set; }
 
-    // Relacje
-    public ICollection<Delivery> Deliveries { get; set; }  // Kolekcja dostaw przypisanych do użytkownika
+    // Właściwości nawigacyjne
+    public ICollection<Delivery> Deliveries { get; set; }
+    public ICollection<Shipment> Shipments { get; set; }
+    public ICollection<InventoryCheck> InventoryChecks { get; set; }
 }

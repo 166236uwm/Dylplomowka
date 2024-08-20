@@ -1,10 +1,10 @@
 public class ShipmentItem
 {
-    public int ItemId { get; set; }         // Id towaru (foreign key)
-    public int ShipmentId { get; set; }     // Id wysyłki (foreign key)
-    public int Amount { get; set; }         // Ilość wysłanego towaru
+    public int ItemId { get; set; }
+    public int ShipmentId { get; set; }
+    public int Amount { get; set; }
 
-    // Relacje
-    public Item Item { get; set; }          // Towar, który został wysłany
-    public Shipment Shipment { get; set; }  // Wysyłka, w ramach której towar został wysłany
+    // Właściwości nawigacyjne
+    public Item Item { get; set; }
+    public Shipment Shipment { get; set; }
 }

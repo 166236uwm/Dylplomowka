@@ -9,12 +9,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Dodaj inne serwisy (np. kontrolery)
 builder.Services.AddControllersWithViews();
+// swagger
+builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 
 // Konfiguracja middleware
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = string.Empty; // Ustawienie na string.Empty pozwala otwierać Swaggera bezpośrednio na adresie głównym
+    });
     app.UseDeveloperExceptionPage();
 }
 else

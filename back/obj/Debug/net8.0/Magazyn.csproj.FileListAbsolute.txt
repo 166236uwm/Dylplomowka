@@ -103,3 +103,12 @@ Q:\Dylplomowka\back\obj\Debug\net8.0\refint\Magazyn.dll
 Q:\Dylplomowka\back\obj\Debug\net8.0\Magazyn.pdb
 Q:\Dylplomowka\back\obj\Debug\net8.0\Magazyn.genruntimeconfig.cache
 Q:\Dylplomowka\back\obj\Debug\net8.0\ref\Magazyn.dll
+Q:\Dylplomowka\back\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+Q:\Dylplomowka\back\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+Q:\Dylplomowka\back\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+Q:\Dylplomowka\back\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+Q:\Dylplomowka\back\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+Q:\Dylplomowka\back\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+Q:\Dylplomowka\back\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+Q:\Dylplomowka\back\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+Q:\Dylplomowka\back\bin\Debug\net8.0\BCrypt.Net-Next.dll

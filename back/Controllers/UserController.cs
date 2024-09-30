@@ -4,7 +4,8 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using BCrypt.Net;
+using Microsoft.AspNetCore.Authorization;
+
 [ApiController]
 [Route("api/[controller]")]
 public class UserController : ControllerBase
@@ -56,6 +57,61 @@ public class UserController : ControllerBase
         var token = GenerateJwtToken(user);
         return Ok(new { Token = token });
     }
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
+    {
+        var users = await _context.Users
+            .Select(u => new UserDto
+            {
+                Id = u.Id,
+                Username = u.Username,
+                Name = u.Name,
+                Surname = u.Surname,
+                Email = u.Email,
+                Role = u.Role
+            })
+            .ToListAsync();
+
+        return Ok(users);
+    }
+    [HttpPut("{id}/role")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateUserRole(int id, [FromBody] string newRole)
+    {
+        var user = await _context.Users.FindAsync(id);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        // You might want to add validation here to ensure newRole is a valid role
+        user.Role = newRole;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!UserExists(id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        return NoContent();
+    }
+
+    private bool UserExists(int id)
+    {
+        return _context.Users.Any(e => e.Id == id);
+    }
 
     private string GenerateJwtToken(User user)
     {
@@ -66,7 +122,7 @@ public class UserController : ControllerBase
         new Claim(ClaimTypes.Role, user.Role)
     };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? throw new InvalidOperationException("Jwt:Key is not configured")));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(

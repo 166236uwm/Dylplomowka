@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace YourNamespace.Controllers
+namespace Warehouse.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -18,9 +18,20 @@ namespace YourNamespace.Controllers
         // GET: api/Items
         [HttpGet]
         [Authorize(Roles = "User, Manager, Admin")]
-        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
+        public async Task<ActionResult<IEnumerable<ItemDto>>> GetItems()
         {
-            return await _context.Items.Include(i => i.Location).ToListAsync();
+            var items = await _context.Items
+                .Select(i => new ItemDto
+                {
+                    ItemId = i.Id,
+                    ItemName = i.Name,
+                    LocationId = i.LocationId,
+                    DefaultUnitSize = i.DefaultUnitSize,
+                    Unit = i.Unit
+                })
+                .ToListAsync();
+
+            return items;
         }
 
         // GET: api/Items/5

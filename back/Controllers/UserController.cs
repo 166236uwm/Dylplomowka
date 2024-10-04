@@ -55,7 +55,7 @@ public class UserController : ControllerBase
         }
 
         var token = GenerateJwtToken(user);
-        return Ok(new { Token = token });
+        return Ok(new { Token = token, Role = user.Role });
     }
     [HttpGet]
     [Authorize(Roles = "Admin")]

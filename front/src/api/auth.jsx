@@ -13,5 +13,6 @@ export const login = async (username, password) => {
     throw new Error('Login failed');
   }
 
-  return response.json();
+  const data = await response.json();
+  return { username, role: data.role, token: data.token };
 };

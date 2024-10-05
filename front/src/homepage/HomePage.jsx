@@ -15,6 +15,7 @@ function HomePage({ user }) {
           <>
             <button onClick={() => navigate('/add-user')}>Add User</button>
             <button onClick={() => navigate('/add-location')}>Add Location</button>
+            <button onClick={() => navigate('/show-users')}>Show Users</button>
           </>
         )
       case 'Manager':

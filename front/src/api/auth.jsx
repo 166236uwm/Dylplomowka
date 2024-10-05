@@ -16,3 +16,17 @@ export const login = async (username, password) => {
   const data = await response.json();
   return { username, role: data.role, token: data.token };
 };
+export const fetchUsers = async (token) => {
+  const response = await fetch(`${API_URL}/User`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch users');
+  }
+  return await response.json();
+};

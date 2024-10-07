@@ -17,11 +17,12 @@ export const login = async (username, password) => {
   return { username, role: data.role, token: data.token };
 };
 export const fetchUsers = async (token) => {
+  console.log(token);
   const response = await fetch(`${API_URL}/User`, {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'text/plain',
+      'Authorization': token,
     },
   });
 

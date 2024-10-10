@@ -10,7 +10,7 @@ public class LocationsController : ControllerBase
         _locationService = locationService;
     }
 
-    [HttpPost]
+    [HttpPost("api/Location")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Location>> CreateLocation(LocationDto locationDto)
     {
@@ -18,7 +18,7 @@ public class LocationsController : ControllerBase
         return CreatedAtAction(nameof(GetLocation), new { id = location.Id }, location);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("api/Location/{id}")] // Change the route to include "location"
     [Authorize(Roles = "User, Manager, Admin")]
     public async Task<ActionResult<Location>> GetLocation(int id)
     {
@@ -33,6 +33,14 @@ public class LocationsController : ControllerBase
     [HttpGet]
     [Authorize(Roles = "User, Manager, Admin")]
     public async Task<ActionResult<IEnumerable<Location>>> GetAllLocations()
+    {
+        var locations = await _locationService.GetAllLocationsAsync();
+        return Ok(locations);
+    }
+
+    [HttpGet("api/Locations")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<IEnumerable<Location>>> GetAllLocationsForAdmin()
     {
         var locations = await _locationService.GetAllLocationsAsync();
         return Ok(locations);

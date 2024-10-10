@@ -50,7 +50,7 @@ public class UserService : IUserService
         }
 
         var token = GenerateJwtToken(user);
-        return new OkObjectResult(new { Token = token, Role = user.Role });
+        return new OkObjectResult(new { Token = token, Role = user.Role, Username = user.Username });
     }
 
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()

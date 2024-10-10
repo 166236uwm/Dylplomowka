@@ -6,19 +6,19 @@ function ShowLocations({ user }) {
   const [locations, setLocations] = useState([]);
   const [error, setError] = useState('');
 
-//   useEffect(() => {
-//     const fetchLocations = async () => {
-//       try {
-//         const data = await authorisedWithoutBody('Locations', user.token);
-//         setLocations(data);
-//       } catch (err) {
-//         setError('Failed to fetch locations');
-//         console.error(err);
-//       }
-//     };
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const data = await authorisedWithoutBody('Locations', user.token);
+        setLocations(data);
+      } catch (err) {
+        setError('Failed to fetch locations');
+        console.error(err);
+      }
+    };
 
-//     fetchLocations();
-//   }, [user.token]);
+    fetchLocations();
+  }, [user.token]);
 
   return (
     <div>

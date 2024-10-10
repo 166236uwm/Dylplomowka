@@ -105,7 +105,7 @@ public class UserController : ControllerBase
             }
         }
 
-        return NoContent();
+        return Ok(new { role = newRole });
     }
 
     private bool UserExists(int id)

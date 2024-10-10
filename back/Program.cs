@@ -44,10 +44,10 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = "CustomJwt";
-    options.DefaultChallengeScheme = "CustomJwt";
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; 
 })
-.AddJwtBearer("CustomJwt", options =>
+.AddJwtBearer(options => // Removed "CustomJwt" parameter
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {

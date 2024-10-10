@@ -1,12 +1,12 @@
 const API_URL = 'http://localhost:5140/api';
 
-export const login = async (username, password) => {
-  const response = await fetch(`${API_URL}/User/login`, {
+export const unauthorisedWithBody = async (url, bodyParams) => {
+  const response = await fetch(`${API_URL}${url}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify(bodyParams),
   });
 
   if (!response.ok) {
@@ -14,11 +14,11 @@ export const login = async (username, password) => {
   }
 
   const data = await response.json();
-  return { username, role: data.role, token: data.token };
+  return { data };
 };
-export const fetchUsers = async (token) => {
-  console.log(token);
-  const response = await fetch(`${API_URL}/User`, {
+
+export const authorisedWithoutBody = async (url, token) => {
+  const response = await fetch(`${API_URL}/${url}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'text/plain',
@@ -31,3 +31,21 @@ export const fetchUsers = async (token) => {
   }
   return await response.json();
 };
+
+export const authorisedWithBody = async (url, bodyParams, token) => {
+  const response = await fetch(`${API_URL}/${url}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    },
+    body: JSON.stringify(bodyParams),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to update user role');
+  }
+
+  return await response.json();
+};
+

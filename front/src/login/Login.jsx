@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { login } from '../api/auth'
+import { unauthorisedWithBody } from '../api/auth'
 
 function Login({ setUser }) {
   const [username, setUsername] = useState('')
@@ -13,8 +13,8 @@ function Login({ setUser }) {
     setError('')
 
     try {
-      const data = await login(username, password)
-      setUser(data)
+      const data = await unauthorisedWithBody("/User/Login", { username, password })
+      setUser(data.data)
       navigate('/home')
     } catch (err) {
       setError('Invalid username or password')

@@ -13,8 +13,8 @@ function HomePage({ user }) {
       case 'Admin':
         return (
           <>
-            <button onClick={() => navigate('/add-user')}>Add User</button>
-            <button onClick={() => navigate('/add-location')}>Add Location</button>
+            <button onClick={() => navigate('/show-items')}>Show Items</button>
+            <button onClick={() => navigate('/show-locations')}>Show Locations</button>
             <button onClick={() => navigate('/show-users')}>Show Users</button>
           </>
         )

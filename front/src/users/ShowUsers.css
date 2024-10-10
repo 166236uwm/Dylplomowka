@@ -1,0 +1,12 @@
+#users-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.user-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+}

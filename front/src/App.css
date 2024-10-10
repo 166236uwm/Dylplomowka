@@ -1,5 +1,12 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 .login-container {
-  max-width: 300px;
+  max-width: 400px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -21,7 +28,7 @@
 }
 
 .login-container input {
-  width: 100%;
+  width: 80%;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 3px;

@@ -22,6 +22,7 @@ function App() {
             element={user && user.role === 'Admin' ? <ShowUsers user={user} /> : <Navigate to="/login" />} 
           />
           <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/show-locations" element={user && user.role === 'Admin' ? <ShowLocations user={user} /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>

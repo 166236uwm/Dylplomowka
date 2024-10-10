@@ -1,116 +1,56 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace Warehouse.Controllers
+public class ItemsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ItemsController : ControllerBase
+    private readonly IItemService _itemService;
+
+    public ItemsController(IItemService itemService)
     {
-        private readonly ApplicationDbContext _context;
+        _itemService = itemService;
+    }
 
-        public ItemsController(ApplicationDbContext context)
+    [HttpGet]
+    [Authorize(Roles = "User, Manager, Admin")]
+    public async Task<ActionResult<IEnumerable<ItemDto>>> GetItems()
+    {
+        var items = await _itemService.GetItemsAsync();
+        return Ok(items);
+    }
+
+    [HttpGet("{id}")]
+    [Authorize(Roles = "User, Manager, Admin")]
+    public async Task<ActionResult<Item>> GetItem(int id)
+    {
+        var item = await _itemService.GetItemAsync(id);
+        if (item == null)
         {
-            _context = context;
+            return NotFound();
         }
+        return Ok(item);
+    }
 
-        // GET: api/Items
-        [HttpGet]
-        [Authorize(Roles = "User, Manager, Admin")]
-        public async Task<ActionResult<IEnumerable<ItemDto>>> GetItems()
-        {
-            var items = await _context.Items
-                .Select(i => new ItemDto
-                {
-                    ItemId = i.Id,
-                    ItemName = i.Name,
-                    LocationId = i.LocationId,
-                    DefaultUnitSize = i.DefaultUnitSize,
-                    Unit = i.Unit
-                })
-                .ToListAsync();
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<Item>> CreateItem(Item item)
+    {
+        var createdItem = await _itemService.CreateItemAsync(item);
+        return CreatedAtAction(nameof(GetItem), new { id = createdItem.Id }, createdItem);
+    }
 
-            return items;
-        }
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateItem(int id, Item item)
+    {
+        await _itemService.UpdateItemAsync(id, item);
+        return NoContent();
+    }
 
-        // GET: api/Items/5
-        [HttpGet("{id}")]
-        [Authorize(Roles = "User, Manager, Admin")]
-        public async Task<ActionResult<Item>> GetItem(int id)
-        {
-            var item = await _context.Items.Include(i => i.Location).FirstOrDefaultAsync(i => i.Id == id);
-
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            return item;
-        }
-
-        // PUT: api/Items/5
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateItem(int id, Item item)
-        {
-            if (id != item.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(item).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Items
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Item>> CreateItem(Item item)
-        {
-            _context.Items.Add(item);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetItem", new { id = item.Id }, item);
-        }
-
-        // DELETE: api/Items/5
-        [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteItem(int id)
-        {
-            var item = await _context.Items.FindAsync(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            _context.Items.Remove(item);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ItemExists(int id)
-        {
-            return _context.Items.Any(e => e.Id == id);
-        }
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteItem(int id)
+    {
+        await _itemService.DeleteItemAsync(id);
+        return NoContent();
     }
 }

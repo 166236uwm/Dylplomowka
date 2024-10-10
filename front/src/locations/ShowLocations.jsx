@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { authorisedWithoutBody } from '../api/auth';
-import './ShowLocations.css';
+//import './ShowLocations.css';
 
 function ShowLocations({ user }) {
   const [locations, setLocations] = useState([]);

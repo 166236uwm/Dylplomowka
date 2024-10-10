@@ -45,7 +45,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; 
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options => // Removed "CustomJwt" parameter
 {
@@ -89,6 +89,12 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
+
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
+
 var app = builder.Build();
 
 // Konfiguracja middleware

@@ -63,4 +63,24 @@ public class ItemService : IItemService
         _context.Items.Remove(item);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<object>> GetItemsGroupedByLocationAsync()
+    {
+        var items = await _context.Items.Include(i => i.Location).ToListAsync();
+        var groupedItems = items.GroupBy(i => i.LocationId)
+            .Select(g => new
+            {
+                LocationId = g.Key,
+                LocationName = g.First().Location.Name, // Assuming Location is included in Item
+                Items = g.Select(i => new
+                {
+                    i.Id,
+                    i.Name,
+                    i.CurrentStock // Simplified property assignment
+                }).ToList()
+            }).ToList();
+
+        Console.WriteLine($"Grouped Items Count: {groupedItems.Count}"); // Log the count of grouped items
+        return groupedItems;
+    }
 }

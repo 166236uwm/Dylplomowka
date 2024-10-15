@@ -14,7 +14,6 @@ function Login({ setUser }) {
 
     try {
       const data = await unauthorisedWithBody("/User/Login", { username, password })
-      console.log(data)
       setUser(data.data)
       navigate('/home')
     } catch (err) {

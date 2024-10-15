@@ -5,8 +5,10 @@ public class Item
     public required int LocationId { get; set; }
     public required float DefaultUnitSize { get; set; }
     public required string Unit { get; set; }
+    
+    public float CurrentStock { get; set; }
 
-    // Właściwości nawigacyjne
+    // Navigation properties
     public required Location Location { get; set; }
     public ICollection<DeliveredItem>? DeliveredItems { get; set; }
     public ICollection<ShipmentItem>? ShipmentItems { get; set; }

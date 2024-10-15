@@ -5,4 +5,5 @@ public interface IItemService
     Task<Item> CreateItemAsync(Item item);
     Task UpdateItemAsync(int id, Item item);
     Task DeleteItemAsync(int id);
+    Task<IEnumerable<object>> GetItemsGroupedByLocationAsync(); // New method
 }

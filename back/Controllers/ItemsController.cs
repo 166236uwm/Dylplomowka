@@ -10,7 +10,7 @@ public class ItemsController : ControllerBase
         _itemService = itemService;
     }
 
-    [HttpGet]
+    [HttpGet("api/Items")]
     [Authorize(Roles = "User, Manager, Admin")]
     public async Task<ActionResult<IEnumerable<ItemDto>>> GetItems()
     {
@@ -18,7 +18,7 @@ public class ItemsController : ControllerBase
         return Ok(items);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("api/Items/{id}")]
     [Authorize(Roles = "User, Manager, Admin")]
     public async Task<ActionResult<Item>> GetItem(int id)
     {
@@ -30,7 +30,7 @@ public class ItemsController : ControllerBase
         return Ok(item);
     }
 
-    [HttpPost]
+    [HttpPost("api/Items")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Item>> CreateItem(Item item)
     {
@@ -38,7 +38,7 @@ public class ItemsController : ControllerBase
         return CreatedAtAction(nameof(GetItem), new { id = createdItem.Id }, createdItem);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("api/Items/{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateItem(int id, Item item)
     {
@@ -46,11 +46,19 @@ public class ItemsController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("api/Items/{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteItem(int id)
     {
         await _itemService.DeleteItemAsync(id);
         return NoContent();
+    }
+
+    [HttpGet("api/Items/grouped-by-location")]
+    [Authorize(Roles = "User, Manager, Admin")]
+    public async Task<ActionResult<IEnumerable<object>>> GetItemsGroupedByLocation()
+    {
+        var groupedItems = await _itemService.GetItemsGroupedByLocationAsync();
+        return Ok(groupedItems);
     }
 }

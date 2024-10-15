@@ -4,6 +4,7 @@ import Login from './login/Login'
 import HomePage from './homepage/HomePage'
 import ShowUsers from './users/ShowUsers'; // Import the new component
 import ShowLocations from './locations/ShowLocations'; // Adjust the path if necessary
+import CurrentStock from './currentStock/CurrentStock';
 import './App.css'
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           />
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/show-locations" element={user && user.role === 'Admin' ? <ShowLocations user={user} /> : <Navigate to="/login" />} />
+          <Route path="/current-stock" element={user ? <CurrentStock user={user} /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>

@@ -1,5 +1,7 @@
 const API_URL = 'http://localhost:5140/api';
 
+//TODO: remake requests so that method can be chosen, remake all requests to use new functionality
+
 export const unauthorisedWithBody = async (url, bodyParams) => {
   const response = await fetch(`${API_URL}${url}`, {
     method: 'POST',
@@ -49,3 +51,16 @@ export const authorisedWithBody = async (url, bodyParams, token) => {
   return await response.json();
 };
 
+export const bookInventoryCheck = async (id, token) => {
+    const response = await fetch(`${API_URL}/InventoryCheck/book/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token,
+        },
+    });
+    if (!response.ok) {
+        throw new Error('Failed to book inventory check');
+    }
+    return await response.json();
+};

@@ -21,7 +21,7 @@ function HomePage({ user }) {
       case 'Manager':
         return (
           <>
-            <button onClick={() => navigate('/book-inventory')}>Book Inventory</button>
+            <button onClick={() => navigate('/inventory')}>Book Inventory</button>
             <button onClick={() => navigate('/current-stock')}>Current Stock</button>
           </>
         )

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { authorisedWithoutBody } from '../api/auth';
+import { apiRequest } from '../api/auth';
 //import './ShowLocations.css';
 
 function ShowLocations({ user }) {
@@ -9,7 +9,7 @@ function ShowLocations({ user }) {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const data = await authorisedWithoutBody('Locations', user.token);
+        const data = await apiRequest('Locations', user.token, null, 'GET');
         setLocations(data);
       } catch (err) {
         setError('Failed to fetch locations');

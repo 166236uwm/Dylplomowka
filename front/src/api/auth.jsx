@@ -1,66 +1,23 @@
 const API_URL = 'http://localhost:5140/api';
 
-//TODO: remake requests so that method can be chosen, remake all requests to use new functionality
+export const apiRequest = async (url, token = null, bodyParams = null, method = 'GET') => {
+  const headers = {
+    'Content-Type': bodyParams ? 'application/json' : 'text/plain',
+  };
 
-export const unauthorisedWithBody = async (url, bodyParams) => {
-  const response = await fetch(`${API_URL}${url}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(bodyParams),
-  });
-
-  if (!response.ok) {
-    throw new Error('Login failed');
+  if (token) {
+    headers['Authorization'] = token;
   }
 
-  const data = await response.json();
-  return { data };
-};
-
-export const authorisedWithoutBody = async (url, token) => {
   const response = await fetch(`${API_URL}/${url}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'text/plain',
-      'Authorization': token,
-    },
+    method: method,
+    headers: headers,
+    body: bodyParams ? JSON.stringify(bodyParams) : null,
   });
 
   if (!response.ok) {
-    throw new Error('Failed to fetch users');
-  }
-  return await response.json();
-};
-
-export const authorisedWithBody = async (url, bodyParams, token) => {
-  const response = await fetch(`${API_URL}/${url}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': token,
-    },
-    body: JSON.stringify(bodyParams),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to update user role');
+    throw new Error(`Request failed: ${response.statusText}`);
   }
 
   return await response.json();
-};
-
-export const bookInventoryCheck = async (id, token) => {
-    const response = await fetch(`${API_URL}/InventoryCheck/book/${id}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
-        },
-    });
-    if (!response.ok) {
-        throw new Error('Failed to book inventory check');
-    }
-    return await response.json();
 };

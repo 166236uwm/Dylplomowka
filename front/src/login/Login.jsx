@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { unauthorisedWithBody } from '../api/auth'
+import { apiRequest } from '../api/auth'
 
 function Login({ setUser }) {
   const [username, setUsername] = useState('')
@@ -13,8 +13,8 @@ function Login({ setUser }) {
     setError('')
 
     try {
-      const data = await unauthorisedWithBody("/User/Login", { username, password })
-      setUser(data.data)
+      const data = await apiRequest("User/Login", null, { username, password }, 'POST')
+      setUser(data)
       navigate('/home')
     } catch (err) {
       setError('Invalid username or password')

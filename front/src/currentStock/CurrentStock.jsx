@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { authorisedWithoutBody } from '../api/auth';
+import { apiRequest } from '../api/auth';
 
 function CurrentStock({ user }) {
   const [itemsByLocation, setItemsByLocation] = useState([]);
@@ -8,7 +8,7 @@ function CurrentStock({ user }) {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const groupedItems = await authorisedWithoutBody('Items/grouped-by-location', user.token);
+        const groupedItems = await apiRequest('Items/grouped-by-location', user.token, null, 'GET');
         setItemsByLocation(groupedItems);
       } catch (err) {
         setError('Failed to fetch items');

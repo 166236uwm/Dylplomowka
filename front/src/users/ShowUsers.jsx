@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { authorisedWithoutBody, authorisedWithBody } from '../api/auth';
+import { apiRequest } from '../api/auth';
 import './ShowUsers.css';
 
 function ShowUsers({ user }) {
@@ -9,7 +9,7 @@ function ShowUsers({ user }) {
   useEffect(() => {
     const getUsers = async () => {
       try {
-        const data = await authorisedWithoutBody("User", user.token);
+        const data = await apiRequest("User", user.token, null, 'GET');
         setUsers(data);
       } catch (error) {
         console.error(error);
@@ -22,7 +22,7 @@ function ShowUsers({ user }) {
   const handleRoleChange = async (id, newRole) => {
     console.log(`Updating role for user ${id} to ${newRole}`);
     try {
-      const data = await authorisedWithBody(`User/${id}/role`, `${newRole}`, user.token);
+      const data = await apiRequest(`User/${id}/role`, user.token, newRole, method='PUT');
       console.log(data);
       // Update the users state with the new role
       setUsers(prevUsers => 

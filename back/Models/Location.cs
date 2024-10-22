@@ -1,8 +1,8 @@
 public class Location
 {
     public int Id { get; set; }           // Unikalny identyfikator lokalizacji (primary key)
-    public string Name { get; set; }      // Nazwa lokalizacji
+    public string Name { get; set; } = null!;      // Nazwa lokalizacji
 
     // Relacje
-    public ICollection<Item> Items { get; set; }  // Kolekcja towarów przypisanych do tej lokalizacji
+    public List<Item> Items { get; set; } = new(); // Initialize to an empty list
 }

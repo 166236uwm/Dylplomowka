@@ -16,6 +16,7 @@ public class ItemService : IItemService
             {
                 ItemId = i.Id,
                 ItemName = i.Name,
+                CurrentStock = i.CurrentStock, // Ensure current stock is included
                 LocationId = i.LocationId,
                 DefaultUnitSize = i.DefaultUnitSize,
                 Unit = i.Unit

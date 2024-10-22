@@ -14,11 +14,10 @@ public class InventoryCheckService : IInventoryCheckService
         var inventoryCheck = new InventoryCheck
         {
             CheckedAt = DateTime.UtcNow,
-            UserId = checkDto.UserId,
-            InventoryCheckItems = checkDto.ItemIds.Select(itemId => new InventoryCheckItem
+            InventoryCheckItems = checkDto.InventoryCheckItems.Select(item => new InventoryCheckItem
             {
-                ItemId = itemId,
-                RecordedAmount = 0 // Initialize with zero until counted
+                ItemId = item.Id,
+                RecordedAmount = item.RecordedAmount
             }).ToList()
         };
 
@@ -50,7 +49,6 @@ public class InventoryCheckService : IInventoryCheckService
             throw new KeyNotFoundException("Inventory check not found.");
         }
 
-        inventoryCheck.UserId = checkDto.UserId;
         // Update other properties as needed
 
         await _context.SaveChangesAsync();

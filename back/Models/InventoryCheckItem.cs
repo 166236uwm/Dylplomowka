@@ -5,6 +5,6 @@ public class InventoryCheckItem
     public int RecordedAmount { get; set; }
 
     // Właściwości nawigacyjne
-    public Item Item { get; set; }
-    public InventoryCheck InventoryCheck { get; set; }
+    public Item? Item { get; set; }
+    public InventoryCheck? InventoryCheck { get; set; }
 }

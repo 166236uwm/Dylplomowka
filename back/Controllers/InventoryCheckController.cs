@@ -1,22 +1,44 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 [ApiController]
 [Route("api/[controller]")]
 public class InventoryCheckController : ControllerBase
 {
     private readonly IInventoryCheckService _inventoryCheckService;
+    private readonly ApplicationDbContext _context;
 
-    public InventoryCheckController(IInventoryCheckService inventoryCheckService)
+    public InventoryCheckController(IInventoryCheckService inventoryCheckService, ApplicationDbContext context)
     {
         _inventoryCheckService = inventoryCheckService;
+        _context = context;
     }
 
     [HttpPost]
-    [Authorize(Roles = "Manager, Admin")]
-    public async Task<ActionResult<InventoryCheck>> CreateInventoryCheck([FromBody] InventoryCheckDto checkDto)
+    [Authorize]
+    public async Task<IActionResult> CreateInventoryCheck([FromBody] InventoryCheckDto inventoryCheckDto)
     {
-        var inventoryCheck = await _inventoryCheckService.CreateInventoryCheckAsync(checkDto);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        if (userId == null)
+        {
+            return BadRequest("User ID is required.");
+        }
+
+        var inventoryCheck = new InventoryCheck
+        {
+            CheckedAt = DateTime.UtcNow,
+            UserId = int.Parse(userId), // Set UserId from the token
+            InventoryCheckItems = inventoryCheckDto.InventoryCheckItems.Select(item => new InventoryCheckItem
+            {
+                ItemId = item.Id,
+                RecordedAmount = item.RecordedAmount
+            }).ToList()
+        };
+
+        _context.InventoryChecks.Add(inventoryCheck);
+        await _context.SaveChangesAsync();
         return CreatedAtAction(nameof(GetInventoryCheck), new { id = inventoryCheck.Id }, inventoryCheck);
     }
 

@@ -6,6 +6,6 @@ public class Shipment
     public int UserId { get; set; }
 
     // Właściwości nawigacyjne
-    public User User { get; set; }
-    public ICollection<ShipmentItem> ShipmentItems { get; set; }
+    public User? User { get; set; } // Made nullable
+    public ICollection<ShipmentItem>? ShipmentItems { get; set; } // Made nullable
 }

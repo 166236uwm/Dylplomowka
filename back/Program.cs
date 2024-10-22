@@ -78,7 +78,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.MaxDepth = 32;
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles; // Change this line
+        options.JsonSerializerOptions.MaxDepth = 32; // Keep this if needed
     });
 builder.Services.AddCors(options =>
 {
@@ -90,7 +91,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-
+builder.Services.AddScoped<IInventoryCheckService, InventoryCheckService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ILocationService, LocationService>();

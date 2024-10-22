@@ -22,7 +22,7 @@ function ShowUsers({ user }) {
   const handleRoleChange = async (id, newRole) => {
     console.log(`Updating role for user ${id} to ${newRole}`);
     try {
-      const data = await apiRequest(`User/${id}/role`, user.token, newRole, method='PUT');
+      const data = await apiRequest(`User/${id}/role`, user.token, newRole, 'PUT');
       console.log(data);
       // Update the users state with the new role
       setUsers(prevUsers => 

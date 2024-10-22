@@ -5,6 +5,6 @@ public class ShipmentItem
     public int Amount { get; set; }
 
     // Właściwości nawigacyjne
-    public Item Item { get; set; }
-    public Shipment Shipment { get; set; }
+    public required Item Item { get; set; }
+    public required Shipment Shipment { get; set; }
 }

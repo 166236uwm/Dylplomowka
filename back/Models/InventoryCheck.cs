@@ -5,6 +5,6 @@ public class InventoryCheck
     public int UserId { get; set; }
 
     // Właściwości nawigacyjne
-    public User User { get; set; }
-    public ICollection<InventoryCheckItem> InventoryCheckItems { get; set; }
+    public User User { get; set; } = null!;
+    public List<InventoryCheckItem> InventoryCheckItems { get; set; } = new(); // Initialize to an empty list
 }

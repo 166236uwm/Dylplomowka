@@ -1,60 +1,61 @@
 import { useEffect, useState } from 'react';
 import { apiRequest } from '../api/auth';
+import { useNavigate } from 'react-router-dom';
 
+function InventoryCheck({ user }) {
+    const [inventoryChecks, setInventoryChecks] = useState([]);
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-// TODO: remake requests to backend so that they use auth.jsx
+    const fetchInventoryChecks = async () => {
+        try {
+            const fetchedChecks = await apiRequest('InventoryCheck', user.token, null, 'GET');
+            setInventoryChecks(fetchedChecks);
+        } catch (err) {
+            setError('Failed to fetch inventory checks');
+            console.error(err);
+        }
+    };
 
-function InventoryCheck() {
-    // const [items, setItems] = useState([]);
-    // const [inventoryCheck, setInventoryCheck] = useState({ checkedAt: new Date(), inventoryCheckItems: [] });
-    // const [isEditing, setIsEditing] = useState(false);
+    const handleNewInventoryCheck = () => {
+        navigate('/inventory/new'); // Navigate to the new inventory check view
+    };
 
-    // useEffect(() => {
-    //     const loadItems = async () => {
-    //         const fetchedItems = await fetchItems();
-    //         setItems(fetchedItems);
-    //     };
-    //     loadItems();
-    // }, []);
+    useEffect(() => {
+        fetchInventoryChecks();
+    }, [user.token]);
 
-    // const handleItemChange = (itemId, amount) => {
-    //     const existingItem = inventoryCheck.inventoryCheckItems.find(item => item.itemId === itemId);
-    //     if (existingItem) {
-    //         existingItem.recordedAmount = amount;
-    //     } else {
-    //         setInventoryCheck(prev => ({
-    //             ...prev,
-    //             inventoryCheckItems: [...prev.inventoryCheckItems, { itemId, recordedAmount: amount }]
-    //         }));
-    //     }
-    // };
-
-    // const handleSubmit = async () => {
-    //     const url = isEditing ? `/api/InventoryCheck/${inventoryCheck.id}` : '/api/InventoryCheck';
-    //     const method = isEditing ? 'PUT' : 'POST';
-    //     const response = await apiRequest(url, user.token, inventoryCheck, method);
-    //     // Reset form or handle success
-    // };
-
-    // const handleBook = async () => {
-    //     await apiRequest(`/api/InventoryCheck/book/${inventoryCheck.id}`, user.token, null, 'POST');
-    //     // Handle booking success
-    // };
+    const savedChecks = inventoryChecks.filter(check => !check.booked);
+    const bookedChecks = inventoryChecks.filter(check => check.booked);
 
     return (
         <div>
-            {/* <h1>Inventory Check</h1>
-            <input type="date" value={inventoryCheck.checkedAt.toISOString().split('T')[0]} onChange={e => setInventoryCheck({ ...inventoryCheck, checkedAt: new Date(e.target.value) })} />
-            <ul>
-                {items.map(item => (
-                    <li key={item.id}>
-                        {item.name}
-                        <input type="number" onChange={e => handleItemChange(item.id, e.target.value)} />
-                    </li>
-                ))}
-            </ul>
-            <button onClick={handleSubmit}>{isEditing ? 'Update' : 'Create'} Inventory Check</button>
-            {isEditing && <button onClick={handleBook}>Book Inventory Check</button>} */}
+            <h1>Inventory Checks</h1>
+            {error && <p className="error">{error}</p>}
+            {inventoryChecks.length === 0 ? (
+                <p>No previous inventory checks</p>
+            ) : (
+                <>
+                    <h2>Saved Inventory Checks</h2>
+                    <ul>
+                        {savedChecks.map(check => (
+                            <li key={check.id}>
+                                Checked At: {new Date(check.checkedAt).toLocaleString()}
+                                <button onClick={() => navigate(`/inventory/${check.id}`)}>View</button>
+                            </li>
+                        ))}
+                    </ul>
+                    <h2>Booked Inventory Checks</h2>
+                    <ul>
+                        {bookedChecks.map(check => (
+                            <li key={check.id}>
+                                Checked At: {new Date(check.checkedAt).toLocaleString()}
+                            </li>
+                        ))}
+                    </ul>
+                </>
+            )}
+            <button onClick={handleNewInventoryCheck}>New Inventory Check</button>
         </div>
     );
 }

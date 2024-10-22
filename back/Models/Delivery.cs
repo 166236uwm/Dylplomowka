@@ -7,6 +7,6 @@ public class Delivery
     public int UserId { get; set; }         // Id użytkownika odpowiedzialnego za dostawę (foreign key)
 
     // Relacje
-    public User User { get; set; }          // Użytkownik odpowiedzialny za dostawę
-    public ICollection<DeliveredItem> DeliveredItems { get; set; }  // Kolekcja dostarczonych towarów
+    public required User User { get; set; }          // Użytkownik odpowiedzialny za dostawę
+    public required ICollection<DeliveredItem> DeliveredItems { get; set; }  // Kolekcja dostarczonych towarów
 }

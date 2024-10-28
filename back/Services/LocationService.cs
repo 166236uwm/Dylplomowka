@@ -15,12 +15,11 @@ public class LocationService : ILocationService
         {
             Name = locationDto.Name
         };
-
+    
         _context.Locations.Add(location);
         await _context.SaveChangesAsync();
         return location;
     }
-
     public async Task<Location> GetLocationAsync(int id)
     {
         var location = await _context.Locations.FindAsync(id);
@@ -34,5 +33,10 @@ public class LocationService : ILocationService
     public async Task<IEnumerable<Location>> GetAllLocationsAsync()
     {
         return await _context.Locations.ToListAsync();
+    }
+    public async Task DeleteLocationAsync(Location location)
+    {
+        _context.Locations.Remove(location);
+        await _context.SaveChangesAsync();
     }
 }

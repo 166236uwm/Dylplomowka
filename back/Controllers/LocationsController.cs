@@ -12,13 +12,13 @@ public class LocationsController : ControllerBase
 
     [HttpPost("api/Location")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<Location>> CreateLocation(LocationDto locationDto)
+    public async Task<ActionResult<Location>> CreateLocation([FromBody] LocationDto locationDto)
     {
         var location = await _locationService.CreateLocationAsync(locationDto);
         return CreatedAtAction(nameof(GetLocation), new { id = location.Id }, location);
     }
 
-    [HttpGet("api/Location/{id}")] // Change the route to include "location"
+    [HttpGet("api/Location/{id}")]
     [Authorize(Roles = "User, Manager, Admin")]
     public async Task<ActionResult<Location>> GetLocation(int id)
     {
@@ -44,5 +44,17 @@ public class LocationsController : ControllerBase
     {
         var locations = await _locationService.GetAllLocationsAsync();
         return Ok(locations);
+    }
+    [HttpDelete("api/Location/{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult> DeleteLocation(int id)
+    {
+        var location = await _locationService.GetLocationAsync(id);
+        if (location == null)
+        {
+            return NotFound();
+        }
+        await _locationService.DeleteLocationAsync(location);
+        return NoContent();
     }
 }

@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import Login from './login/Login'
 import HomePage from './homepage/HomePage'
-import ShowUsers from './users/ShowUsers'; // Import the new component
-import ShowLocations from './locations/ShowLocations'; // Adjust the path if necessary
+import ShowUsers from './users/ShowUsers';
+import ShowLocations from './locations/ShowLocations';
 import CurrentStock from './currentStock/CurrentStock';
 import InventoryCheck from './inventoryCheck/InventoryCheck';
-import NewInventoryCheck from './inventoryCheck/NewInventoryCheck'; // Import the new component
+import NewInventoryCheck from './inventoryCheck/NewInventoryCheck';
+import Register from './login/Register'
 import './App.css'
 
 function App() {
@@ -29,7 +30,8 @@ function App() {
           <Route path="/show-locations" element={user && user.role === 'Admin' ? <ShowLocations user={user} /> : <Navigate to="/login" />} />
           <Route path="/current-stock" element={user ? <CurrentStock user={user} /> : <Navigate to="/login" />} />
           <Route path="/inventory" element={user ? <InventoryCheck user={user} /> : <Navigate to="/login" />} />
-          <Route path="/inventory/new" element={user ? <NewInventoryCheck user={user} /> : <Navigate to="/login" />} /> {/* New route */}
+          <Route path="/inventory/new" element={user ? <NewInventoryCheck user={user} /> : <Navigate to="/login" />} /> 
+          <Route path="/register" element={<Register/>} />
         </Routes>
       </div>
     </Router>

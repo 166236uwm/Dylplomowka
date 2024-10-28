@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { apiRequest } from '../api/auth';
 import './ShowUsers.css';
 
 function ShowUsers({ user }) {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getUsers = async () => {
@@ -34,9 +36,15 @@ function ShowUsers({ user }) {
       console.error(error);
     }
   };
+
+  const handleAddUser = () => {
+    navigate('/register');
+  };
+
   return (
     <div>
       <h1>Users List</h1>
+      <button onClick={handleAddUser}>Add User</button>
       <select
         value={filter}
         onChange={(e) => setFilter(e.target.value)}

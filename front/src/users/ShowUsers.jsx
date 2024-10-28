@@ -21,17 +21,27 @@ function ShowUsers({ user }) {
   }, [user.token]);
 
   const filteredUsers = users.filter(user => user.role.includes(filter));
+
   const handleRoleChange = async (id, newRole) => {
     console.log(`Updating role for user ${id} to ${newRole}`);
     try {
       const data = await apiRequest(`User/${id}/role`, user.token, newRole, 'PUT');
       console.log(data);
-      // Update the users state with the new role
       setUsers(prevUsers => 
         prevUsers.map(user => 
           user.id === id ? { ...user, role: newRole } : user
         )
       );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDeleteUser = async (id) => {
+    console.log(`Deleting user ${id}`);
+    try {
+      await apiRequest(`User/${id}`, user.token, null, 'DELETE');
+      setUsers(prevUsers => prevUsers.filter(user => user.id !== id));
     } catch (error) {
       console.error(error);
     }
@@ -66,6 +76,7 @@ function ShowUsers({ user }) {
               <option value="Manager">Manager</option>
               <option value="User">User</option>
             </select>
+            <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
           </div>
         ))}
       </div>

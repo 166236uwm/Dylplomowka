@@ -11,10 +11,12 @@ using Microsoft.AspNetCore.Authorization;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly ApplicationDbContext _context; // Add this line
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, ApplicationDbContext context) // Modify constructor
     {
         _userService = userService;
+        _context = context; // Assign the context
     }
 
     [HttpPost("register")]
@@ -41,5 +43,21 @@ public class UserController : ControllerBase
     public Task<IActionResult> UpdateUserRole(int id, [FromBody] string newRole)
     {
         return _userService.UpdateUserRole(id, newRole);
+    }
+    
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteUser(int id)
+    {
+        var user = await _context.Users.FindAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
     }
 }

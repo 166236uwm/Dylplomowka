@@ -14,9 +14,9 @@ public class ItemService : IItemService
         return await _context.Items
             .Select(i => new ItemDto
             {
-                ItemId = i.Id,
-                ItemName = i.Name,
-                CurrentStock = i.CurrentStock, // Ensure current stock is included
+                Id = i.Id,
+                Name = i.Name,
+                CurrentStock = i.CurrentStock,
                 LocationId = i.LocationId,
                 DefaultUnitSize = i.DefaultUnitSize,
                 Unit = i.Unit
@@ -27,9 +27,8 @@ public class ItemService : IItemService
     public async Task<Item> GetItemAsync(int id)
     {
         var item = await _context.Items.Include(i => i.Location).FirstOrDefaultAsync(i => i.Id == id);
-        if (item == null) 
+        if (item == null)
         {
-            // Handle the null case, e.g., throw an exception or return a default value
             throw new InvalidOperationException("Item not found.");
         }
         return item;
@@ -42,15 +41,38 @@ public class ItemService : IItemService
         return item;
     }
 
-    public async Task UpdateItemAsync(int id, Item item)
+    public async Task UpdateItemAsync(int id, ItemDto itemDto)
     {
-        if (id != item.Id)
+        var existingItem = await _context.Items.FindAsync(id);
+        if (existingItem == null)
         {
-            throw new ArgumentException("Item ID mismatch");
+            throw new KeyNotFoundException("Item not found");
         }
 
-        _context.Entry(item).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
+        // Update only the necessary fields
+        existingItem.LocationId = itemDto.LocationId;
+        existingItem.Name = itemDto.Name;
+        existingItem.CurrentStock = itemDto.CurrentStock;
+        existingItem.DefaultUnitSize = itemDto.DefaultUnitSize;
+        existingItem.Unit = itemDto.Unit;
+
+        _context.Entry(existingItem).State = EntityState.Modified;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!ItemExists(id))
+            {
+                throw new KeyNotFoundException("Item not found");
+            }
+            else
+            {
+                throw;
+            }
+        }
     }
 
     public async Task DeleteItemAsync(int id)
@@ -72,16 +94,20 @@ public class ItemService : IItemService
             .Select(g => new
             {
                 LocationId = g.Key,
-                LocationName = g.First().Location.Name, // Assuming Location is included in Item
+                LocationName = g.First().Location.Name,
                 Items = g.Select(i => new
                 {
                     i.Id,
                     i.Name,
-                    i.CurrentStock // Simplified property assignment
+                    i.CurrentStock
                 }).ToList()
             }).ToList();
 
-        Console.WriteLine($"Grouped Items Count: {groupedItems.Count}"); // Log the count of grouped items
         return groupedItems;
+    }
+
+    private bool ItemExists(int id)
+    {
+        return _context.Items.Any(e => e.Id == id);
     }
 }

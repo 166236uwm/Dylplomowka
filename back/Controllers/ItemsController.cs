@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
+[ApiController]
+[Route("api/[controller]")]
 public class ItemsController : ControllerBase
 {
     private readonly IItemService _itemService;
@@ -10,7 +13,7 @@ public class ItemsController : ControllerBase
         _itemService = itemService;
     }
 
-    [HttpGet("api/Items")]
+    [HttpGet]
     [Authorize(Roles = "User, Manager, Admin")]
     public async Task<ActionResult<IEnumerable<ItemDto>>> GetItems()
     {
@@ -18,7 +21,7 @@ public class ItemsController : ControllerBase
         return Ok(items);
     }
 
-    [HttpGet("api/Items/{id}")]
+    [HttpGet("{id}")]
     [Authorize(Roles = "User, Manager, Admin")]
     public async Task<ActionResult<Item>> GetItem(int id)
     {
@@ -30,7 +33,7 @@ public class ItemsController : ControllerBase
         return Ok(item);
     }
 
-    [HttpPost("api/Items")]
+    [HttpPost]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Item>> CreateItem(Item item)
     {
@@ -38,15 +41,26 @@ public class ItemsController : ControllerBase
         return CreatedAtAction(nameof(GetItem), new { id = createdItem.Id }, createdItem);
     }
 
-    [HttpPut("api/Items/{id}")]
+    [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> UpdateItem(int id, Item item)
+    public async Task<IActionResult> UpdateItem(int id, [FromBody] ItemDto itemDto)
     {
-        await _itemService.UpdateItemAsync(id, item);
-        return NoContent();
+        try
+        {
+            await _itemService.UpdateItemAsync(id, itemDto);
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return Conflict("The item was modified or deleted by another process.");
+        }
     }
 
-    [HttpDelete("api/Items/{id}")]
+    [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteItem(int id)
     {
@@ -54,7 +68,7 @@ public class ItemsController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet("api/Items/grouped-by-location")]
+    [HttpGet("grouped-by-location")]
     [Authorize(Roles = "User, Manager, Admin")]
     public async Task<ActionResult<IEnumerable<object>>> GetItemsGroupedByLocation()
     {

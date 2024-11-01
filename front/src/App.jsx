@@ -4,11 +4,12 @@ import Login from './login/Login'
 import HomePage from './homepage/HomePage'
 import ShowUsers from './users/ShowUsers';
 import ShowLocations from './locations/ShowLocations';
-import CurrentStock from './currentStock/CurrentStock';
+import CurrentStock from './items/currentStock/CurrentStock';
 import InventoryCheck from './inventoryCheck/InventoryCheck';
 import NewInventoryCheck from './inventoryCheck/NewInventoryCheck';
 import Register from './login/Register'
 import './App.css'
+import ShowItems from './items/showItems/ShowItems';
 
 function App() {
   const [user, setUser] = useState(null)
@@ -32,6 +33,7 @@ function App() {
           <Route path="/inventory" element={user ? <InventoryCheck user={user} /> : <Navigate to="/login" />} />
           <Route path="/inventory/new" element={user ? <NewInventoryCheck user={user} /> : <Navigate to="/login" />} /> 
           <Route path="/register" element={<Register/>} />
+          <Route path="/show-items" element={user && user.role === 'Admin' ? <ShowItems user={user} /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>

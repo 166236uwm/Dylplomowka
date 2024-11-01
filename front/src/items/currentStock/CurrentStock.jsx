@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { apiRequest } from '../api/auth';
+import { apiRequest } from '../../api/auth';
 
 function CurrentStock({ user }) {
   const [itemsByLocation, setItemsByLocation] = useState([]);

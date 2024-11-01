@@ -1,9 +1,9 @@
 public class ItemDto
 {
-    public int ItemId { get; set; }
-    public required string ItemName { get; set; }
-    public float CurrentStock { get; set; } // Add this line
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
     public int LocationId { get; set; }
     public float DefaultUnitSize { get; set; }
-    public required string Unit { get; set; }
+    public string Unit { get; set; } = string.Empty;
+    public float CurrentStock { get; set; }
 }

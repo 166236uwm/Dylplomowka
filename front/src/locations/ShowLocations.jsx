@@ -82,10 +82,21 @@ function ShowLocations({ user }) {
               </button>
             </div>
             {expandedLocation === location.id && (
-              <ul className="items-list">
-                {itemsByLocation[location.id]?.map(item => (
-                  <li key={item.id}>{item.name}</li>
-                ))}
+              <ul>
+                {itemsByLocation
+                  .filter(itemGroup => itemGroup.locationId === location.id)
+                  .map(itemGroup => (
+                    itemGroup.items.length > 0 ? (
+                      itemGroup.items.map(item => (
+                        <li key={item.id}>
+                          {item.name} - Current Stock: {item.currentStock}
+                        </li>
+                      ))
+                    ) : (
+                      <li key="no-items">No items available</li>
+                    )
+                  ))
+                }
               </ul>
             )}
           </li>

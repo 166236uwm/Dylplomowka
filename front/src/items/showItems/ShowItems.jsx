@@ -1,41 +1,40 @@
 import { useEffect, useState } from 'react';
 import { apiRequest } from '../../api/auth';
-import { useNavigate } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-function ShowItems({ user }) {
+const ShowItems = ({ user }) => {
   const [itemsByLocation, setItemsByLocation] = useState([]);
+  const [locations, setLocations] = useState([]);
   const [newItemName, setNewItemName] = useState('');
   const [newItemLocation, setNewItemLocation] = useState('');
-  const [error, setError] = useState('');
+  const [newItemUnitSize, setNewItemUnitSize] = useState('');
+  const [newItemUnit, setNewItemUnit] = useState('');
+  const [error, setError] = useState(null);
+
+  const fetchItems = async () => {
+    try {
+      const groupedItems = await apiRequest('Items/grouped-by-location', user.token, null, 'GET');
+      setItemsByLocation(groupedItems);
+      setLocations(groupedItems.map(location => ({ id: location.locationId, name: location.locationName })));
+    } catch (err) {
+      setError('Failed to fetch items');
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const groupedItems = await apiRequest('Items/grouped-by-location', user.token, null, 'GET');
-        setItemsByLocation(groupedItems);
-      } catch (err) {
-        setError('Failed to fetch items');
-        console.error(err);
-      }
-    };
     fetchItems();
   }, [user.token]);
 
   const handleAddItem = async () => {
     try {
-      const newItem = await apiRequest('Items', user.token, { name: newItemName, locationId: newItemLocation }, 'POST');
-      setItemsByLocation(prevItems => {
-        const locationIndex = prevItems.findIndex(loc => loc.locationId === newItemLocation);
-        if (locationIndex !== -1) {
-          prevItems[locationIndex].items.push(newItem);
-        } else {
-          prevItems.push({ locationId: newItemLocation, locationName: 'New Location', items: [newItem] });
-        }
-        return [...prevItems];
-      });
-      setNewItemName('');
-      setNewItemLocation('');
+      await apiRequest('Items', user.token, {
+        name: newItemName,
+        locationId: newItemLocation,
+        unitSize: newItemUnitSize,
+        unit: newItemUnit
+      }, 'POST');
+      fetchItems(); // Fetch items again after adding a new item
     } catch (err) {
       setError('Failed to add item');
       console.error(err);
@@ -71,32 +70,49 @@ function ShowItems({ user }) {
 
   return (
     <div>
-      <h1>Show Items</h1>
-      {error && <p className="error">{error}</p>}
+      <h1>Items</h1>
+      {error && <p>{error}</p>}
       <div>
         <input
           type="text"
           value={newItemName}
           onChange={(e) => setNewItemName(e.target.value)}
-          placeholder="New Item Name"
+          placeholder="Item Name"
+        />
+        <select
+          value={newItemLocation}
+          onChange={(e) => setNewItemLocation(e.target.value)}
+        >
+          <option value="">Select Location</option>
+          {locations.map(location => (
+            <option key={location.id} value={location.id}>
+              {location.name}
+            </option>
+          ))}
+        </select>
+        <input
+          type="number"
+          value={newItemUnitSize}
+          onChange={(e) => setNewItemUnitSize(e.target.value)}
+          placeholder="Unit Size"
         />
         <input
           type="text"
-          value={newItemLocation}
-          onChange={(e) => setNewItemLocation(e.target.value)}
-          placeholder="Location ID"
+          value={newItemUnit}
+          onChange={(e) => setNewItemUnit(e.target.value)}
+          placeholder="Unit"
         />
         <button onClick={handleAddItem}>Add Item</button>
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>
         {itemsByLocation.map(location => (
-          <Droppable key={location.locationId} droppableId={location.locationId.toString()}>
+          <Droppable key={`location-${location.locationId}`} droppableId={location.locationId.toString()}>
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 <h2>{location.locationName}</h2>
                 <ul>
                   {location.items.map((item, index) => (
-                    <Draggable key={item.id} draggableId={item.id.toString()} index={index}>
+                    <Draggable key={`item-${item.id}`} draggableId={item.id.toString()} index={index}>
                       {(provided) => (
                         <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                           {item.name} - Current Stock: {item.currentStock}
@@ -113,6 +129,6 @@ function ShowItems({ user }) {
       </DragDropContext>
     </div>
   );
-}
+};
 
 export default ShowItems;

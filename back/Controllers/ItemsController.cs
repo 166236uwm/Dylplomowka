@@ -35,9 +35,9 @@ public class ItemsController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<Item>> CreateItem(Item item)
+    public async Task<ActionResult<Item>> CreateItem(CreateItemDto createItemDto)
     {
-        var createdItem = await _itemService.CreateItemAsync(item);
+        var createdItem = await _itemService.CreateItemAsync(createItemDto);
         return CreatedAtAction(nameof(GetItem), new { id = createdItem.Id }, createdItem);
     }
 

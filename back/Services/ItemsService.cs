@@ -41,6 +41,29 @@ public class ItemService : IItemService
         return item;
     }
 
+    public async Task<Item> CreateItemAsync(CreateItemDto createItemDto)
+    {
+        var location = await _context.Locations.FindAsync(createItemDto.LocationId);
+        if (location == null)
+        {
+            throw new KeyNotFoundException("Location not found");
+        }
+
+        var item = new Item
+        {
+            Name = createItemDto.Name,
+            LocationId = createItemDto.LocationId,
+            Location = location,
+            DefaultUnitSize = createItemDto.DefaultUnitSize,
+            Unit = createItemDto.Unit,
+            CurrentStock = 0 // Initialize CurrentStock to 0 or any default value
+        };
+
+        _context.Items.Add(item);
+        await _context.SaveChangesAsync();
+        return item;
+    }
+
     public async Task UpdateItemAsync(int id, ItemDto itemDto)
     {
         var existingItem = await _context.Items.FindAsync(id);

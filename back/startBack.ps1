@@ -1,0 +1,2 @@
+cd back
+dotnet run

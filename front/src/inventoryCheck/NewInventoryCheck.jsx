@@ -12,13 +12,7 @@ function NewInventoryCheck({ user }) {
     const fetchItems = async () => {
         try {
             const fetchedItems = await apiRequest('Items', user.token, null, 'GET');
-            console.log('Fetched Items:', fetchedItems); // Log the fetched items
-            if (Array.isArray(fetchedItems)) {
-                setItems(fetchedItems);
-            } else {
-                console.error('Fetched items is not an array:', fetchedItems);
-                setItems([]); // Set to an empty array if the response is not as expected
-            }
+            setItems(fetchedItems);
         } catch (err) {
             setError('Failed to fetch items');
             console.error(err);
@@ -30,12 +24,7 @@ function NewInventoryCheck({ user }) {
     }, [user.token]);
 
     const handleAddItem = (item) => {
-        console.log('Adding item:', item); // Log the item being added
-        if (item.itemId) { // Check if item has an id
-            setSelectedItems(prev => [...prev, { itemId: item.itemId, itemName: item.itemName, recordedAmount: 0 }]); // Store itemName
-        } else {
-            console.error('Item does not have an id:', item); // Log an error if id is missing
-        }
+        setSelectedItems(prev => [...prev, { itemId: item.id, itemName: item.name, recordedAmount: 0 }]);
     };
 
     const handleAmountChange = (itemId, amount) => {
@@ -51,12 +40,12 @@ function NewInventoryCheck({ user }) {
             const payload = {
                 inventoryCheckItems: selectedItems.map(item => ({
                     id: item.itemId,
-                    recordedAmount: Number(item.recordedAmount) // Convert the recorded amount to a number
+                    recordedAmount: Number(item.recordedAmount)
                 }))
             };
-            console.log('Payload to be sent:', payload); // Log the payload
+            console.log('Payload to be sent:', payload);
             await apiRequest('InventoryCheck', user.token, payload, 'POST');
-            navigate('/inventory'); // Redirect to inventory checks after saving
+            navigate('/inventory');
         } catch (err) {
             setError('Failed to save inventory check');
             console.error(err);
@@ -64,7 +53,7 @@ function NewInventoryCheck({ user }) {
     };
 
     const filteredItems = Array.isArray(items) ? items.filter(item => 
-        item.itemName && item.itemName.toLowerCase().includes(searchTerm.toLowerCase())
+        item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase())
     ) : [];
 
     return (
@@ -79,8 +68,8 @@ function NewInventoryCheck({ user }) {
             />
             <ul>
                 {filteredItems.map(item => (
-                    <li key={item.itemId}>
-                        {item.itemName}
+                    <li key={item.id}>
+                        {item.name}
                         <button onClick={() => handleAddItem(item)}>Add</button>
                     </li>
                 ))}
@@ -89,7 +78,7 @@ function NewInventoryCheck({ user }) {
             <ul>
                 {selectedItems.map(item => (
                     <li key={item.itemId}>
-                        Item: {item.itemName} {/* Display the item name instead of itemId */}
+                        Item: {item.itemName}
                         <input 
                             type="number" 
                             value={item.recordedAmount} 

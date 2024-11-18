@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 [ApiController]
@@ -29,7 +30,8 @@ public class InventoryCheckController : ControllerBase
         var inventoryCheck = new InventoryCheck
         {
             CheckedAt = DateTime.UtcNow,
-            UserId = int.Parse(userId), // Set UserId from the token
+            UserId = int.Parse(userId),
+            Status = "saved", // Set status to saved
             InventoryCheckItems = inventoryCheckDto.InventoryCheckItems.Select(item => new InventoryCheckItem
             {
                 ItemId = item.Id,
@@ -75,6 +77,40 @@ public class InventoryCheckController : ControllerBase
     public async Task<IActionResult> DeleteInventoryCheck(int id)
     {
         await _inventoryCheckService.DeleteInventoryCheckAsync(id);
+        return NoContent();
+    }
+
+    [HttpPost("{id}/book")]
+    [Authorize(Roles = "Manager, Admin")]
+    public async Task<IActionResult> BookInventoryCheck(int id)
+    {
+        var inventoryCheck = await _context.InventoryChecks
+            .Include(ic => ic.InventoryCheckItems)
+            .ThenInclude(ici => ici.Item)
+            .FirstOrDefaultAsync(ic => ic.Id == id);
+
+        if (inventoryCheck == null)
+        {
+            return NotFound();
+        }
+
+        if (inventoryCheck.Status == "booked")
+        {
+            return BadRequest("Inventory check is already booked.");
+        }
+
+        foreach (var item in inventoryCheck.InventoryCheckItems)
+        {
+            var dbItem = await _context.Items.FindAsync(item.ItemId);
+            if (dbItem != null)
+            {
+                dbItem.CurrentStock = item.RecordedAmount;
+            }
+        }
+
+        inventoryCheck.Status = "booked";
+        await _context.SaveChangesAsync();
+
         return NoContent();
     }
 }

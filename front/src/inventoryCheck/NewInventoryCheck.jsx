@@ -43,11 +43,28 @@ function NewInventoryCheck({ user }) {
                     recordedAmount: Number(item.recordedAmount)
                 }))
             };
-            console.log('Payload to be sent:', payload);
             await apiRequest('InventoryCheck', user.token, payload, 'POST');
             navigate('/inventory');
         } catch (err) {
             setError('Failed to save inventory check');
+            console.error(err);
+        }
+    };
+
+    const handleBook = async () => {
+        try {
+            const payload = {
+                inventoryCheckItems: selectedItems.map(item => ({
+                    id: item.itemId,
+                    recordedAmount: Number(item.recordedAmount)
+                }))
+            };
+            const response = await apiRequest('InventoryCheck', user.token, payload, 'POST');
+            const inventoryCheckId = response.id;
+            await apiRequest(`InventoryCheck/${inventoryCheckId}/book`, user.token, null, 'POST');
+            navigate('/inventory');
+        } catch (err) {
+            setError('Failed to book inventory check');
             console.error(err);
         }
     };
@@ -88,6 +105,7 @@ function NewInventoryCheck({ user }) {
                 ))}
             </ul>
             <button onClick={handleSave}>Save Inventory Check</button>
+            <button onClick={handleBook}>Book Inventory Check</button>
         </div>
     );
 }

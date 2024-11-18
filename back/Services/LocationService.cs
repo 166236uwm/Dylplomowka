@@ -9,17 +9,18 @@ public class LocationService : ILocationService
         _context = context;
     }
 
-    public async Task<Location> CreateLocationAsync(LocationDto locationDto)
+    public async Task<Location> CreateLocationAsync(CreateLocationDto createLocationDto)
     {
         var location = new Location
         {
-            Name = locationDto.Name
+            Name = createLocationDto.Name
         };
-    
+
         _context.Locations.Add(location);
         await _context.SaveChangesAsync();
         return location;
     }
+
     public async Task<Location> GetLocationAsync(int id)
     {
         var location = await _context.Locations.FindAsync(id);

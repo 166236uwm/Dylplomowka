@@ -15,15 +15,25 @@ const ShowItems = ({ user }) => {
     try {
       const groupedItems = await apiRequest('Items/grouped-by-location', user.token, null, 'GET');
       setItemsByLocation(groupedItems);
-      setLocations(groupedItems.map(location => ({ id: location.locationId, name: location.locationName })));
     } catch (err) {
       setError('Failed to fetch items');
       console.error(err);
     }
   };
 
+  const fetchLocations = async () => {
+    try {
+      const locationsData = await apiRequest('Locations', user.token, null, 'GET');
+      setLocations(locationsData);
+    } catch (err) {
+      setError('Failed to fetch locations');
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     fetchItems();
+    fetchLocations();
   }, [user.token]);
 
   const handleAddItem = async () => {
@@ -31,7 +41,7 @@ const ShowItems = ({ user }) => {
       await apiRequest('Items', user.token, {
         name: newItemName,
         locationId: newItemLocation,
-        unitSize: newItemUnitSize,
+        defaultUnitSize: newItemUnitSize,
         unit: newItemUnit
       }, 'POST');
       fetchItems(); // Fetch items again after adding a new item
@@ -105,27 +115,34 @@ const ShowItems = ({ user }) => {
         <button onClick={handleAddItem}>Add Item</button>
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>
-        {itemsByLocation.map(location => (
-          <Droppable key={`location-${location.locationId}`} droppableId={location.locationId.toString()}>
-            {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                <h2>{location.locationName}</h2>
-                <ul>
-                  {location.items.map((item, index) => (
-                    <Draggable key={`item-${item.id}`} draggableId={item.id.toString()} index={index}>
-                      {(provided) => (
-                        <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                          {item.name} - Current Stock: {item.currentStock}
-                        </li>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </ul>
-              </div>
-            )}
-          </Droppable>
-        ))}
+        {locations.map(location => {
+          const locationItems = itemsByLocation.find(itemGroup => itemGroup.locationId === location.id)?.items || [];
+          return (
+            <Droppable key={`location-${location.id}`} droppableId={location.id.toString()}>
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  <h2>{location.name}</h2>
+                  <ul>
+                    {locationItems.length > 0 ? (
+                      locationItems.map((item, index) => (
+                        <Draggable key={`item-${item.id}`} draggableId={item.id.toString()} index={index}>
+                          {(provided) => (
+                            <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                              {item.name} - Current Stock: {item.currentStock} , Unit Size: {item.defaultUnitSize} {item.unit}
+                            </li>
+                          )}
+                        </Draggable>
+                      ))
+                    ) : (
+                      <li>No items available</li>
+                    )}
+                    {provided.placeholder}
+                  </ul>
+                </div>
+              )}
+            </Droppable>
+          );
+        })}
       </DragDropContext>
     </div>
   );

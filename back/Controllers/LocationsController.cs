@@ -12,9 +12,9 @@ public class LocationsController : ControllerBase
 
     [HttpPost("api/Location")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<Location>> CreateLocation([FromBody] LocationDto locationDto)
+    public async Task<ActionResult<Location>> CreateLocation([FromBody] CreateLocationDto createLocationDto)
     {
-        var location = await _locationService.CreateLocationAsync(locationDto);
+        var location = await _locationService.CreateLocationAsync(createLocationDto);
         return CreatedAtAction(nameof(GetLocation), new { id = location.Id }, location);
     }
 
@@ -30,20 +30,18 @@ public class LocationsController : ControllerBase
         return location;
     }
 
-    [HttpGet]
-    [Authorize(Roles = "User, Manager, Admin")]
-    public async Task<ActionResult<IEnumerable<Location>>> GetAllLocations()
-    {
-        var locations = await _locationService.GetAllLocationsAsync();
-        return Ok(locations);
-    }
-
     [HttpGet("api/Locations")]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<IEnumerable<Location>>> GetAllLocationsForAdmin()
+    [Authorize(Roles = "User, Manager, Admin")]
+    public async Task<ActionResult<IEnumerable<LocationDto>>> GetAllLocations()
     {
         var locations = await _locationService.GetAllLocationsAsync();
-        return Ok(locations);
+        var locationDtos = locations.Select(location => new LocationDto
+        {
+            Id = location.Id,
+            Name = location.Name
+        }).ToList();
+
+        return Ok(locationDtos);
     }
     [HttpDelete("api/Location/{id}")]
     [Authorize(Roles = "Admin")]

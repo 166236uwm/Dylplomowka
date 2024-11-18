@@ -122,7 +122,9 @@ public class ItemService : IItemService
                 {
                     i.Id,
                     i.Name,
-                    i.CurrentStock
+                    i.CurrentStock,
+                    i.DefaultUnitSize,
+                    i.Unit
                 }).ToList()
             }).ToList();
 

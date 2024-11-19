@@ -41,17 +41,35 @@ public class InventoryCheckService : IInventoryCheckService
             .ToListAsync();
     }
 
-    public async Task UpdateInventoryCheckAsync(int id, InventoryCheckDto checkDto)
+    public async Task<bool> UpdateInventoryCheckAsync(int id, InventoryCheckDto checkDto)
     {
-        var inventoryCheck = await _context.InventoryChecks.FindAsync(id);
+        var inventoryCheck = await _context.InventoryChecks
+            .Include(ic => ic.InventoryCheckItems)
+            .FirstOrDefaultAsync(ic => ic.Id == id);
+
         if (inventoryCheck == null)
         {
-            throw new KeyNotFoundException("Inventory check not found.");
+            return false;
+        }
+
+        // Update inventory check items
+        inventoryCheck.InventoryCheckItems.Clear();
+        foreach (var itemDto in checkDto.InventoryCheckItems)
+        {
+            inventoryCheck.InventoryCheckItems.Add(new InventoryCheckItem
+            {
+                ItemId = itemDto.Id,
+                RecordedAmount = itemDto.RecordedAmount
+            });
         }
 
         // Update other properties as needed
+        inventoryCheck.Status = checkDto.Status;
+        inventoryCheck.CheckedAt = checkDto.CheckedAt;
+        inventoryCheck.UserId = checkDto.UserId;
 
         await _context.SaveChangesAsync();
+        return true;
     }
 
     public async Task DeleteInventoryCheckAsync(int id)

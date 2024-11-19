@@ -53,11 +53,13 @@ function ViewInventoryCheck({ user }) {
   const handleSave = async () => {
     try {
       const payload = {
-        status: 'saved',
         inventoryCheckItems: inventoryCheck.inventoryCheckItems.map(item => ({
-          id: item.itemId,
-          recordedAmount: item.recordedAmount
-        }))
+          id: item.itemId, // Change itemId to id
+          recordedAmount: Number(item.recordedAmount) // Ensure recordedAmount is a number
+        })),
+        status: inventoryCheck.status,
+        checkedAt: inventoryCheck.checkedAt,
+        userId: inventoryCheck.userId
       };
       await apiRequest(`InventoryCheck/${id}`, user.token, payload, 'PUT');
       setInventoryCheck({ ...inventoryCheck, status: 'saved' });
@@ -89,6 +91,11 @@ function ViewInventoryCheck({ user }) {
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const getItemName = (itemId) => {
+    const item = items.find(item => item.id === itemId);
+    return item ? item.name : 'Unknown Item';
+  };
+
   return (
     <div>
       <h1>Inventory Check Details</h1>
@@ -97,7 +104,7 @@ function ViewInventoryCheck({ user }) {
       <ul>
         {inventoryCheck.inventoryCheckItems.map(item => (
           <li key={item.itemId}>
-            Item ID: {item.itemId}, Recorded Amount: 
+            Item Name: {getItemName(item.itemId)}, Recorded Amount: 
             <input
               type="number"
               value={item.recordedAmount}

@@ -112,3 +112,6 @@ Q:\Dylplomowka\back\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdCon
 Q:\Dylplomowka\back\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 Q:\Dylplomowka\back\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
 Q:\Dylplomowka\back\bin\Debug\net8.0\BCrypt.Net-Next.dll
+Q:\Dylplomowka\back\bin\Debug\net8.0\Magazyn.staticwebassets.endpoints.json
+Q:\Dylplomowka\back\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+Q:\Dylplomowka\back\obj\Debug\net8.0\staticwebassets\msbuild.Magazyn.Microsoft.AspNetCore.StaticWebAssetEndpoints.props

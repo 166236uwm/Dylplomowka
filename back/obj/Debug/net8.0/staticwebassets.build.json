@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "djIClDM3BIExn8PXEPCbKtokN8+oQqVYMq6DqbxyjAE=",
+  "Hash": "x17XXRnUmybDaF7+gUAittu/lGPipxO2ZfuS7lt268g=",
   "Source": "Magazyn",
   "BasePath": "_content/Magazyn",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

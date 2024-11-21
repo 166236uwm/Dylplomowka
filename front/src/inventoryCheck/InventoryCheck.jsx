@@ -25,8 +25,8 @@ function InventoryCheck({ user }) {
         fetchInventoryChecks();
     }, [user.token]);
 
-    const savedChecks = inventoryChecks.filter(check => !check.booked);
-    const bookedChecks = inventoryChecks.filter(check => check.booked);
+    const savedChecks = inventoryChecks.filter(check => check.status === 'saved');
+    const bookedChecks = inventoryChecks.filter(check => check.status === 'booked');
 
     return (
         <div>

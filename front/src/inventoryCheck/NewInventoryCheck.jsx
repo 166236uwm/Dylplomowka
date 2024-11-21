@@ -40,8 +40,11 @@ function NewInventoryCheck({ user }) {
             const payload = {
                 inventoryCheckItems: selectedItems.map(item => ({
                     id: item.itemId,
-                    recordedAmount: Number(item.recordedAmount)
-                }))
+                    recordedAmount: Number(item.recordedAmount) // Ensure recordedAmount is a number
+                })),
+                status: 'saved', // Add the status field
+                checkedAt: new Date().toISOString(), // Add the checkedAt field
+                userId: user.id // Add the userId field
             };
             await apiRequest('InventoryCheck', user.token, payload, 'POST');
             navigate('/inventory');

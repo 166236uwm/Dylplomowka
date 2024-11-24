@@ -23,6 +23,7 @@ function HomePage({ user }) {
           <>
             <button onClick={() => navigate('/inventory')}>Book Inventory</button>
             <button onClick={() => navigate('/current-stock')}>Current Stock</button>
+            <button onClick={() => navigate('/deliveries')}>Deliveries</button>
           </>
         )
       case 'User':

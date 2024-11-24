@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -91,6 +90,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddScoped<IDeliveryService, DeliveryService>();
 builder.Services.AddScoped<IInventoryCheckService, InventoryCheckService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IItemService, ItemService>();

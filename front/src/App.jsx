@@ -11,6 +11,9 @@ import Register from './login/Register'
 import './App.css'
 import ShowItems from './items/showItems/ShowItems';
 import ViewInventoryCheck from './inventoryCheck/ViewInventoryCheck';
+import Deliveries from './deliveries/Deliveries';
+import NewDelivery from './deliveries/NewDelivery';
+import ViewDelivery from './deliveries/ViewDelivery';
 
 function App() {
   const [user, setUser] = useState(null)
@@ -35,8 +38,10 @@ function App() {
           <Route path="/inventory/new" element={user ? <NewInventoryCheck user={user} /> : <Navigate to="/login" />} /> 
           <Route path="/register" element={<Register/>} />
           <Route path="/show-items" element={user && user.role === 'Admin' ? <ShowItems user={user} /> : <Navigate to="/login" />} />
-          <Route path="/inventory/:id" element={user ? <ViewInventoryCheck user={user} /> : <Navigate to="/login" />} /> {/* Add the new route */}
-
+          <Route path="/inventory/:id" element={user ? <ViewInventoryCheck user={user} /> : <Navigate to="/login" />} /> 
+          <Route path="/deliveries" element={user && user.role === 'Manager' ? <Deliveries user={user} /> : <Navigate to="/login" />} />
+          <Route path="/deliveries/new" element={user && user.role === 'Manager' ? <NewDelivery user={user} /> : <Navigate to="/login" />} />
+          <Route path="/deliveries/:id" element={user && user.role === 'Manager' ? <ViewDelivery user={user} /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>

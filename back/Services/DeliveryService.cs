@@ -1,4 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+
 public class DeliveryService : IDeliveryService
 {
     private readonly ApplicationDbContext _context;
@@ -104,7 +108,11 @@ public class DeliveryService : IDeliveryService
 
     public async Task<bool> MarkAsShippedAsync(int id)
     {
-        var delivery = await _context.Deliveries.FindAsync(id);
+        var delivery = await _context.Deliveries
+            .Include(d => d.DeliveredItems)
+            .ThenInclude(di => di.Item)
+            .FirstOrDefaultAsync(d => d.Id == id);
+
         if (delivery == null || delivery.Status != "ordered")
         {
             return false;
@@ -112,6 +120,13 @@ public class DeliveryService : IDeliveryService
 
         delivery.Status = "shipped";
         delivery.DeliveredAt = DateTime.UtcNow;
+
+        // Update current stock for each delivered item
+        foreach (var deliveredItem in delivery.DeliveredItems)
+        {
+            deliveredItem.Item.CurrentStock += deliveredItem.Amount;
+        }
+
         await _context.SaveChangesAsync();
         return true;
     }

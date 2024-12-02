@@ -38,22 +38,19 @@ function NewDelivery({ user }) {
 
   const handleSave = async () => {
     try {
-      const payload = {
-        deliveredItems: selectedItems.map(item => ({
-          itemId: item.itemId,
-          amount: Number(item.amount)
-        })),
-        status: 'ordered',
-        bookedAt: new Date().toISOString(),
-        userId: user.id
-      };
-      const response = await apiRequest('Delivery', user.token, payload, 'POST');
-      const deliveryId = response.id;
-      await apiRequest(`Delivery/${deliveryId}/book`, user.token, null, 'POST');
-      navigate('/deliveries');
+        const payload = {
+            deliveredItems: selectedItems.map(item => ({
+                itemId: item.itemId,
+                amount: Number(item.amount)
+            })),
+            status: 'saved',
+            bookedAt: new Date().toISOString()
+        };
+        const response = await apiRequest('Delivery', user.token, payload, 'POST');
+        navigate('/deliveries');
     } catch (err) {
-      setError('Failed to save delivery');
-      console.error(err);
+        setError('Failed to save delivery');
+        console.error(err);
     }
   };
 

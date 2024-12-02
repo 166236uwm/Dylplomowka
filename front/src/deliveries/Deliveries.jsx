@@ -58,6 +58,7 @@ function Deliveries({ user }) {
         {orderedDeliveries.map(delivery => (
           <li key={delivery.id}>
             Booked At: {new Date(delivery.bookedAt).toLocaleString()}
+            <button onClick={() => navigate(`/deliveries/${delivery.id}`)}>View</button>
             <button onClick={() => handleMarkAsShipped(delivery.id)}>Mark as Shipped</button>
           </li>
         ))}
@@ -67,6 +68,7 @@ function Deliveries({ user }) {
         {shippedDeliveries.map(delivery => (
           <li key={delivery.id}>
             Delivered At: {new Date(delivery.deliveredAt).toLocaleString()}
+            <button onClick={() => navigate(`/deliveries/${delivery.id}`)}>View</button>
           </li>
         ))}
       </ul>

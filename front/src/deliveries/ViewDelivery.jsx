@@ -31,6 +31,15 @@ function ViewDelivery({ user }) {
       console.error(err);
     }
   };
+  const handleOrder = async () => {
+    try {
+      await apiRequest(`Delivery/${id}/book`, user.token, null, 'POST');
+      setDelivery({ ...delivery, status: 'ordered' });
+    } catch (err) {
+      setError('Failed to place order');
+      console.error(err);
+    }
+  }
 
   if (error) {
     return <p className="error">{error}</p>;
@@ -43,7 +52,7 @@ function ViewDelivery({ user }) {
   return (
     <div>
       <h1>Delivery Details</h1>
-      <p>Booked At: {new Date(delivery.bookedAt).toLocaleString()}</p>
+      <p>Saved At: {new Date(delivery.bookedAt).toLocaleString()}</p>
       <p>Status: {delivery.status}</p>
       <ul>
         {delivery.deliveredItems.map(item => (
@@ -52,6 +61,9 @@ function ViewDelivery({ user }) {
           </li>
         ))}
       </ul>
+      {delivery.status === 'saved' && (
+        <button onClick={handleOrder}>Place as order</button>
+      )}
       {delivery.status === 'ordered' && (
         <button onClick={handleMarkAsShipped}>Mark as Shipped</button>
       )}

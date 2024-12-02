@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -16,6 +17,13 @@ public class DeliveryController : ControllerBase
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> CreateDelivery([FromBody] DeliveryDto deliveryDto)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId == null)
+        {
+            return BadRequest("User ID is required.");
+        }
+
+        deliveryDto.UserId = int.Parse(userId);
         var delivery = await _deliveryService.CreateDeliveryAsync(deliveryDto);
         return CreatedAtAction(nameof(GetDelivery), new { id = delivery.Id }, delivery);
     }

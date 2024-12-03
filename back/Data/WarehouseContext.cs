@@ -18,6 +18,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<InventoryCheckItem> InventoryCheckItems { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<TransactionItem> TransactionItems { get; set; }
+    public DbSet<StockConfiguration> StockConfigurations { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

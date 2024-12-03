@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore; // Add this line
-using System.Security.Claims; // Add this line
-using Microsoft.IdentityModel.Tokens; // Add this using directive
-using System.Text; // Add this using directive
-using System.IdentityModel.Tokens.Jwt; // Add this line
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 
 public class UserService : IUserService
 {

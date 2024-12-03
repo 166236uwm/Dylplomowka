@@ -8,4 +8,3 @@ public class Transaction
     public required User User { get; set; }
     public ICollection<TransactionItem> TransactionItems { get; set; } = new List<TransactionItem>();
 }
-

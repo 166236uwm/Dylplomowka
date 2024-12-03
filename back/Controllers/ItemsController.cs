@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,11 +8,13 @@ using Microsoft.EntityFrameworkCore;
 public class ItemsController : ControllerBase
 {
     private readonly IItemService _itemService;
-
-    public ItemsController(IItemService itemService)
+    private readonly ApplicationDbContext _context;
+    public ItemsController(IItemService itemService, ApplicationDbContext context)
     {
-        _itemService = itemService;
+        _itemService = itemService ?? throw new ArgumentNullException(nameof(itemService));
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
+
 
     [HttpGet]
     [Authorize(Roles = "User, Manager, Admin")]
@@ -75,4 +78,15 @@ public class ItemsController : ControllerBase
         var groupedItems = await _itemService.GetItemsGroupedByLocationAsync();
         return Ok(groupedItems);
     }
+    [HttpGet("toOrder")]
+    [Authorize(Roles = "Manager, Admin")]
+    public async Task<ActionResult<IEnumerable<Item>>> GetItemsToOrder()
+    {
+        var itemsToOrder = await _context.Items
+            .Where(i => i.Status == "toOrder")
+            .ToListAsync();
+
+        return Ok(itemsToOrder);
+    }
+
 }

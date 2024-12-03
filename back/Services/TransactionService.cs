@@ -28,10 +28,9 @@ public class TransactionService : ITransactionService
                 Amount = item.Amount,
                 Price = _context.Items.Find(item.ItemId)?.Price ?? throw new ArgumentException("Invalid ItemId"),
                 Item = _context.Items.Find(item.ItemId) ?? throw new ArgumentException("Invalid ItemId"),
-                Transaction = null
+                Transaction = null 
             }).ToList()
         };
-
 
         foreach (var transactionItem in transaction.TransactionItems)
         {

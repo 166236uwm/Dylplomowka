@@ -16,6 +16,7 @@ function HomePage({ user }) {
             <button onClick={() => navigate('/show-items')}>Show Items</button>
             <button onClick={() => navigate('/show-locations')}>Show Locations</button>
             <button onClick={() => navigate('/show-users')}>Show Users</button>
+            <button onClick={() => navigate('/transactions')}>View Transactions</button>
           </>
         )
       case 'Manager':
@@ -24,11 +25,16 @@ function HomePage({ user }) {
             <button onClick={() => navigate('/inventory')}>Book Inventory</button>
             <button onClick={() => navigate('/current-stock')}>Current Stock</button>
             <button onClick={() => navigate('/deliveries')}>Deliveries</button>
+            <button onClick={() => navigate('/transactions')}>View Transactions</button>
+
           </>
         )
       case 'User':
         return (
+          <>
           <button onClick={() => navigate('/current-stock')}>Current Stock</button>
+          <button onClick={() => navigate('/transactions/new')}>New Transaction</button>
+          </>
         )
       default:
         return null

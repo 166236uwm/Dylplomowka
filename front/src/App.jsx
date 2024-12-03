@@ -14,6 +14,8 @@ import ViewInventoryCheck from './inventoryCheck/ViewInventoryCheck';
 import Deliveries from './deliveries/Deliveries';
 import NewDelivery from './deliveries/NewDelivery';
 import ViewDelivery from './deliveries/ViewDelivery';
+import Transactions from './transactions/Transactions';
+import NewTransaction from './transactions/NewTransaction';
 
 function App() {
   const [user, setUser] = useState(null)
@@ -42,6 +44,8 @@ function App() {
           <Route path="/deliveries" element={user && user.role === 'Manager' ? <Deliveries user={user} /> : <Navigate to="/login" />} />
           <Route path="/deliveries/new" element={user && user.role === 'Manager' ? <NewDelivery user={user} /> : <Navigate to="/login" />} />
           <Route path="/deliveries/:id" element={user && user.role === 'Manager' ? <ViewDelivery user={user} /> : <Navigate to="/login" />} />
+          <Route path="/transactions" element={user && (user.role === 'Manager' || user.role === 'Admin') ? <Transactions user={user} /> : <Navigate to="/login" />} />
+          <Route path="/transactions/new" element={user && (user.role === 'User') ? <NewTransaction user={user} /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>

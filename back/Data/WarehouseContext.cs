@@ -16,12 +16,13 @@ public class ApplicationDbContext : DbContext
     public DbSet<ShipmentItem> ShipmentItems { get; set; }
     public DbSet<InventoryCheck> InventoryChecks { get; set; }
     public DbSet<InventoryCheckItem> InventoryCheckItems { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<TransactionItem> TransactionItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Konfiguracja kluczy złożonych
         modelBuilder.Entity<DeliveredItem>()
             .HasKey(di => new { di.ItemId, di.DeliveryId });
 
@@ -31,7 +32,9 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<InventoryCheckItem>()
             .HasKey(ici => new { ici.ItemId, ici.InventoryCheckId });
 
-        // Konfiguracja relacji 1 do wielu (jeden-to-wiele)
+        modelBuilder.Entity<TransactionItem>()
+            .HasKey(ti => new { ti.ItemId, ti.TransactionId }); 
+
         modelBuilder.Entity<Item>()
             .HasOne(i => i.Location)
             .WithMany(l => l.Items)
@@ -81,5 +84,15 @@ public class ApplicationDbContext : DbContext
             .HasOne(ici => ici.InventoryCheck)
             .WithMany(ic => ic.InventoryCheckItems)
             .HasForeignKey(ici => ici.InventoryCheckId);
+
+        modelBuilder.Entity<TransactionItem>()
+            .HasOne(ti => ti.Item)
+            .WithMany(i => i.TransactionItems)
+            .HasForeignKey(ti => ti.ItemId);
+
+        modelBuilder.Entity<TransactionItem>()
+            .HasOne(ti => ti.Transaction)
+            .WithMany(t => t.TransactionItems)
+            .HasForeignKey(ti => ti.TransactionId);
     }
 }

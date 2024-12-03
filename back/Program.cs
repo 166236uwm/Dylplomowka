@@ -6,13 +6,11 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Dodaj serwisy do kontenera DI (Dependency Injection)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Dodaj inne serwisy (np. kontrolery)
 builder.Services.AddControllersWithViews();
-// swagger
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -46,7 +44,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer(options => // Removed "CustomJwt" parameter
+.AddJwtBearer(options => 
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -77,8 +75,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles; // Change this line
-        options.JsonSerializerOptions.MaxDepth = 32; // Keep this if needed
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles; 
+        options.JsonSerializerOptions.MaxDepth = 32; 
     });
 builder.Services.AddCors(options =>
 {
@@ -95,17 +93,18 @@ builder.Services.AddScoped<IInventoryCheckService, InventoryCheckService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 var app = builder.Build();
 
-// Konfiguracja middleware
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        c.RoutePrefix = string.Empty; // Ustawienie na string.Empty pozwala otwierać Swaggera bezpośrednio na adresie głównym
+        c.RoutePrefix = string.Empty; 
     });
     app.UseDeveloperExceptionPage();
 }

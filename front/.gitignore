@@ -22,3 +22,71 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Systemowe pliki tymczasowe i backupy
+.DS_Store
+Thumbs.db
+*.log
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Pliki budowania i generowane dane
+build/
+dist/
+out/
+.cache/
+public/
+.vite/
+*.tsbuildinfo
+
+# Pliki środowiska
+.env
+.env.*.local
+
+# Pliki edytorów/IDE
+.vscode/
+.idea/
+*.iml
+
+# Pliki konfiguracyjne maszyn lokalnych
+*.local
+*.bak
+*.swp
+*.tmp
+*.seed
+*.store
+
+# Logi systemowe
+*.log
+
+# Test coverage
+coverage/
+
+# Pliki generowane przez lintery/prettiera
+*.eslintcache
+*.stylelintcache
+
+# Pliki przeglądarek
+.sass-cache/
+*.css.map
+
+# Pliki tymczasowe
+temp/
+*.tmp
+*.temp
+
+# Pliki wersjonowania pakietów (locki w przypadku zmiany systemów)
+package-lock.json*
+yarn.lock
+pnpm-lock.yaml
+
+# Pliki generowane przez frameworki (np. Next.js)
+.next/
+.vercel/
+
+# Pliki specyficzne dla środowiska CI/CD
+.ci/
+

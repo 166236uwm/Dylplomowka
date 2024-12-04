@@ -1,0 +1,48 @@
+# Systemowe pliki tymczasowe i backupy
+[Dd]esktop.ini
+[Tt]humbs.db
+*.DS_Store
+
+# Pliki logów
+*.log
+
+# Pliki środowiska Visual Studio
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sqlite
+
+# Pliki kompilacji
+bin/
+obj/
+out/
+
+# Dane tymczasowe narzędzi
+*.db
+*.bak
+*.swp
+*.temp
+*.tmp
+*.ide
+*.seed
+*.store
+
+# Pliki generowane przez narzędzia
+*.vspscc
+*.vssscc
+.builds
+
+# Konfiguracja systemów ciągłej integracji (np. Rider/JetBrains)
+.idea/
+*.iml
+.idea_modules/
+
+# Pliki konfiguracyjne maszyn lokalnych
+*.config
+*.settings
+
+# Pliki Entity Framework migracji binarnych
+*.efmigration

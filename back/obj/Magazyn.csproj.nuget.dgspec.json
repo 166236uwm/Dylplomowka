@@ -1,31 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "Q:\\Dylplomowka\\back\\Magazyn.csproj": {}
+    "D:\\Szkoła\\Semestr 6\\Dylplomowka\\back\\Magazyn.csproj": {}
   },
   "projects": {
-    "Q:\\Dylplomowka\\back\\Magazyn.csproj": {
+    "D:\\Szkoła\\Semestr 6\\Dylplomowka\\back\\Magazyn.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "Q:\\Dylplomowka\\back\\Magazyn.csproj",
+        "projectUniqueName": "D:\\Szkoła\\Semestr 6\\Dylplomowka\\back\\Magazyn.csproj",
         "projectName": "Magazyn",
-        "projectPath": "Q:\\Dylplomowka\\back\\Magazyn.csproj",
+        "projectPath": "D:\\Szkoła\\Semestr 6\\Dylplomowka\\back\\Magazyn.csproj",
         "packagesPath": "C:\\Users\\zenek\\.nuget\\packages\\",
-        "outputPath": "Q:\\Dylplomowka\\back\\obj\\",
+        "outputPath": "D:\\Szkoła\\Semestr 6\\Dylplomowka\\back\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
           "C:\\Users\\zenek\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -42,9 +40,8 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+          "auditMode": "direct"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -130,7 +127,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

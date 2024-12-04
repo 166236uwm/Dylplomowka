@@ -18,6 +18,7 @@ import Transactions from './transactions/Transactions';
 import NewTransaction from './transactions/NewTransaction';
 import ConfigurationPanel from './configuration/ConfigurationPanel';
 import TransactionDetails from './transactions/TransactionDetail';
+import Header from './header/Header';
 
 function App() {
   const [user, setUser] = useState(null)
@@ -25,24 +26,25 @@ function App() {
   return (
     <Router>
       <div className="App">
+        {location.pathname !== '/login' && <Header />}
         <Routes>
           <Route path="/login" element={<Login setUser={setUser} />} />
-          <Route 
-            path="/home" 
-            element={user ? <HomePage user={user} /> : <Navigate to="/login" />} 
+          <Route
+            path="/home"
+            element={user ? <HomePage user={user} /> : <Navigate to="/login" />}
           />
-          <Route 
-            path="/show-users" 
-            element={user && user.role === 'Admin' ? <ShowUsers user={user} /> : <Navigate to="/login" />} 
+          <Route
+            path="/show-users"
+            element={user && user.role === 'Admin' ? <ShowUsers user={user} /> : <Navigate to="/login" />}
           />
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/show-locations" element={user && user.role === 'Admin' ? <ShowLocations user={user} /> : <Navigate to="/login" />} />
           <Route path="/current-stock" element={user ? <CurrentStock user={user} /> : <Navigate to="/login" />} />
           <Route path="/inventory" element={user ? <InventoryCheck user={user} /> : <Navigate to="/login" />} />
-          <Route path="/inventory/new" element={user ? <NewInventoryCheck user={user} /> : <Navigate to="/login" />} /> 
-          <Route path="/register" element={<Register/>} />
+          <Route path="/inventory/new" element={user ? <NewInventoryCheck user={user} /> : <Navigate to="/login" />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/show-items" element={user && user.role === 'Admin' ? <ShowItems user={user} /> : <Navigate to="/login" />} />
-          <Route path="/inventory/:id" element={user ? <ViewInventoryCheck user={user} /> : <Navigate to="/login" />} /> 
+          <Route path="/inventory/:id" element={user ? <ViewInventoryCheck user={user} /> : <Navigate to="/login" />} />
           <Route path="/deliveries" element={user && user.role === 'Manager' ? <Deliveries user={user} /> : <Navigate to="/login" />} />
           <Route path="/deliveries/new" element={user && user.role === 'Manager' ? <NewDelivery user={user} /> : <Navigate to="/login" />} />
           <Route path="/deliveries/:id" element={user && user.role === 'Manager' ? <ViewDelivery user={user} /> : <Navigate to="/login" />} />

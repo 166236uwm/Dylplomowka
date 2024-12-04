@@ -44,9 +44,10 @@ public class TransactionController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "Manager, Admin")]
-    public async Task<ActionResult<IEnumerable<Transaction>>> GetAllTransactions()
+    public async Task<ActionResult<IEnumerable<TransactionSummaryDto>>> GetAllTransactions()
     {
         var transactions = await _transactionService.GetAllTransactionsAsync();
         return Ok(transactions);
     }
+
 }

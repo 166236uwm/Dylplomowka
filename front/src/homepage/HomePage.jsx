@@ -17,6 +17,7 @@ function HomePage({ user }) {
             <button onClick={() => navigate('/show-locations')}>Show Locations</button>
             <button onClick={() => navigate('/show-users')}>Show Users</button>
             <button onClick={() => navigate('/transactions')}>View Transactions</button>
+            <button onClick={() => navigate('/configuration')}>Configuration</button>
           </>
         )
       case 'Manager':

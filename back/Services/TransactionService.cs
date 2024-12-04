@@ -28,7 +28,7 @@ public class TransactionService : ITransactionService
                 Amount = item.Amount,
                 Price = _context.Items.Find(item.ItemId)?.Price ?? throw new ArgumentException("Invalid ItemId"),
                 Item = _context.Items.Find(item.ItemId) ?? throw new ArgumentException("Invalid ItemId"),
-                Transaction = null 
+                Transaction = null
             }).ToList()
         };
 
@@ -49,21 +49,45 @@ public class TransactionService : ITransactionService
         return transaction;
     }
 
-    public async Task<Transaction> GetTransactionAsync(int id)
+    public async Task<TransactionDto?> GetTransactionAsync(int id)
+{
+    var transaction = await _context.Transactions
+        .Include(t => t.TransactionItems)
+        .ThenInclude(ti => ti.Item)
+        .Include(t => t.User)
+        .FirstOrDefaultAsync(t => t.Id == id);
+
+    if (transaction == null)
     {
-        return await _context.Transactions
-            .Include(t => t.TransactionItems)
-            .ThenInclude(ti => ti.Item)
-            .Include(t => t.User)
-            .FirstOrDefaultAsync(t => t.Id == id) ?? throw new InvalidOperationException("Transaction not found");
+        return null;
     }
 
-    public async Task<IEnumerable<Transaction>> GetAllTransactionsAsync()
+    return new TransactionDto
+    {
+        CreatedAt = transaction.CreatedAt,
+        UserId = transaction.UserId,
+        TotalPrice = transaction.TotalPrice,
+        TransactionItems = transaction.TransactionItems.Select(ti => new TransactionItemDto
+        {
+            ItemId = ti.ItemId,
+            Amount = ti.Amount
+        }).ToList()
+    };
+}
+
+
+    public async Task<IEnumerable<TransactionSummaryDto>> GetAllTransactionsAsync()
     {
         return await _context.Transactions
-            .Include(t => t.TransactionItems)
-            .ThenInclude(ti => ti.Item)
             .Include(t => t.User)
+            .Select(t => new TransactionSummaryDto
+            {
+                Id = t.Id,
+                CreatedAt = t.CreatedAt,
+                Username = t.User.Username,
+                TotalPrice = t.TotalPrice
+            })
             .ToListAsync();
     }
+
 }

@@ -100,6 +100,7 @@ builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IStockLevelService, StockLevelService>();
+builder.Services.AddScoped<IStockConfigurationService, StockConfigurationService>();
 
 void SeedDefaultStockConfiguration(ApplicationDbContext context)
 {
@@ -154,7 +155,7 @@ app.UseAuthorization();
 RecurringJob.AddOrUpdate<StockLevelService>(
     "check-stock-levels",
     service => service.CheckStockLevelsAsync(),
-    "* * * * *");
+    Cron.Daily);
 
 app.MapControllerRoute(
     name: "default",

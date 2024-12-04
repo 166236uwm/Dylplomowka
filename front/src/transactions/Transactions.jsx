@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiRequest } from '../api/auth';
 
@@ -28,15 +28,16 @@ function Transactions({ user }) {
       <ul>
         {transactions.map(transaction => (
           <li key={transaction.id}>
-            Created At: {new Date(transaction.createdAt).toLocaleString()}
-            <ul>
-              {transaction.transactionItems.map(item => (
-                <li key={item.itemId}>
-                  Item Name: {item.item.name}, Amount: {item.amount}, Price: {item.price}
-                </li>
-              ))}
-            </ul>
-            Total Price: {transaction.totalPrice}
+            <p>
+              <strong>Created At:</strong> {new Date(transaction.createdAt).toLocaleString()}
+            </p>
+            <p>
+              <strong>Username:</strong> {transaction.username}
+            </p>
+            <p>
+              <strong>Total Price:</strong> ${transaction.totalPrice.toFixed(2)}
+            </p>
+            <button onClick={() => navigate(`/transaction/${transaction.id}`)}>View Details</button>
           </li>
         ))}
       </ul>

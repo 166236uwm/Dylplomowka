@@ -17,31 +17,37 @@ public class StockLevelService : IStockLevelService
             throw new InvalidOperationException("Brak konfiguracji magazynu.");
         }
 
-        var items = await _context.Items.Include(i => i.TransactionItems).ToListAsync();
+        var items = await _context.Items
+            .Include(i => i.TransactionItems)
+            .ThenInclude(ti => ti.Transaction)
+            .ToListAsync();
 
         foreach (var item in items)
         {
-            if (item.TransactionItems == null || !item.TransactionItems.Any())
+
+            if (item.TransactionItems == null)
             {
                 continue;
             }
 
-            // Ensure that Transaction is not null
+            if (!item.TransactionItems.Any())
+            {
+                continue;
+            }
             var transactionItemsWithTransaction = item.TransactionItems.Where(ti => ti.Transaction != null).ToList();
             if (!transactionItemsWithTransaction.Any())
             {
                 continue;
             }
 
-            // Oblicz średnie dzienne zużycie
             var totalConsumption = transactionItemsWithTransaction.Sum(ti => ti.Amount);
             var daysCount = (DateTime.UtcNow - transactionItemsWithTransaction.Min(ti => ti.Transaction!.CreatedAt)).TotalDays;
             var dailyUsage = daysCount > 0 ? totalConsumption / daysCount : 0;
 
-            // Oblicz minimalny zapas
-            var requiredStock = dailyUsage * (config.DefaultStockDays + config.LeadTimeDays);
+            var requiredStock = dailyUsage * ((config.DefaultStockDays + config.LeadTimeDays) * (1 + config.SafetyStock));
 
-            // Aktualizuj status, jeśli potrzebne
+            Console.WriteLine($"{item.Name}: {requiredStock}");
+
             if (item.CurrentStock < requiredStock)
             {
                 item.Status = "toOrder";

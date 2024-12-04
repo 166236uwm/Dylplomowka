@@ -16,6 +16,8 @@ import NewDelivery from './deliveries/NewDelivery';
 import ViewDelivery from './deliveries/ViewDelivery';
 import Transactions from './transactions/Transactions';
 import NewTransaction from './transactions/NewTransaction';
+import ConfigurationPanel from './configuration/ConfigurationPanel';
+import TransactionDetails from './transactions/TransactionDetail';
 
 function App() {
   const [user, setUser] = useState(null)
@@ -46,6 +48,8 @@ function App() {
           <Route path="/deliveries/:id" element={user && user.role === 'Manager' ? <ViewDelivery user={user} /> : <Navigate to="/login" />} />
           <Route path="/transactions" element={user && (user.role === 'Manager' || user.role === 'Admin') ? <Transactions user={user} /> : <Navigate to="/login" />} />
           <Route path="/transactions/new" element={user && (user.role === 'User') ? <NewTransaction user={user} /> : <Navigate to="/login" />} />
+          <Route path="/transaction/:id" element={user && (user.role === 'Manager' || user.role === 'Admin') ? <TransactionDetails user={user} /> : <Navigate to="/login" />} />
+          <Route path="/configuration" element={user && user.role === 'Admin' ? <ConfigurationPanel user={user} /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>

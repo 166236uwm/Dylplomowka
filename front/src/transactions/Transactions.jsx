@@ -25,22 +25,28 @@ function Transactions({ user }) {
     <div>
       <h1>Transactions</h1>
       {error && <p className="error">{error}</p>}
-      <ul>
-        {transactions.map(transaction => (
-          <li key={transaction.id}>
-            <p>
-              <strong>Created At:</strong> {new Date(transaction.createdAt).toLocaleString()}
-            </p>
-            <p>
-              <strong>Username:</strong> {transaction.username}
-            </p>
-            <p>
-              <strong>Total Price:</strong> ${transaction.totalPrice.toFixed(2)}
-            </p>
-            <button onClick={() => navigate(`/transaction/${transaction.id}`)}>View Details</button>
-          </li>
-        ))}
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Created At</th>
+            <th>Username</th>
+            <th>Total Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {transactions.map(transaction => (
+            <tr key={transaction.id}>
+              <td>{new Date(transaction.createdAt).toLocaleString()}</td>
+              <td>{transaction.username}</td>
+              <td>${transaction.totalPrice.toFixed(2)}</td>
+              <td>
+                <button onClick={() => navigate(`/transaction/${transaction.id}`)}>View Details</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

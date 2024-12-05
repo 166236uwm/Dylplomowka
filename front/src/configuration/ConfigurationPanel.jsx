@@ -44,27 +44,22 @@ function ConfigurationPanel({ user }) {
 
     return (
         <div>
-            <h1>Stock Configurations</h1>
+            <h1>Stock Configuration</h1>
             {error && <p className="error">{error}</p>}
-            <ul>
-                {configurations.map(config => (
-                    <li key={config.id}>
-                        {config.defaultStockDays} days, {config.leadTimeDays} days, {config.safetyStock} units
-                    </li>
-                ))}
-            </ul>
             <div>
                 <h2>Edit Configuration</h2>
-                <label>
-                    Default Stock Days:
-                    <input
-                        type="number"
-                        name="defaultStockDays"
-                        value={currentConfig.defaultStockDays}
-                        onChange={handleChange}
-                    />
-                </label>
-                <label>
+                <p>
+                    <label>
+                        Default Stock Days:
+                        <input
+                            type="number"
+                            name="defaultStockDays"
+                            value={currentConfig.defaultStockDays}
+                            onChange={handleChange}
+                        />
+                    </label>
+                </p>
+                <p><label>
                     Lead Time Days:
                     <input
                         type="number"
@@ -73,15 +68,18 @@ function ConfigurationPanel({ user }) {
                         onChange={handleChange}
                     />
                 </label>
-                <label>
-                    Safety Stock:
-                    <input
-                        type="number"
-                        name="safetyStock"
-                        value={currentConfig.safetyStock}
-                        onChange={handleChange}
-                    />
-                </label>
+                </p>
+                <p>
+                    <label>
+                        Safety Stock:
+                        <input
+                            type="number"
+                            name="safetyStock"
+                            value={currentConfig.safetyStock}
+                            onChange={handleChange}
+                        />
+                    </label>
+                    </p>
                 <button onClick={handleUpdate}>Update</button>
             </div>
         </div>

@@ -20,27 +20,38 @@ function CurrentStock({ user }) {
   }, [user.token]);
 
   return (
-    <div>
+    <div className='showItems'>
       <h1>Current Stock</h1>
       {error && <p className="error">{error}</p>}
-      <ul>
-        {itemsByLocation.map(({ locationId, locationName, items = [] }) => (
-          <li key={locationId}>
-            <h2>{locationName}</h2>
-            <ul>
+      {itemsByLocation.map(({ locationId, locationName, items = [] }) => (
+        <div key={locationId}>
+          <h2>{locationName}</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Item Name</th>
+                <th>Current Stock</th>
+                <th>Unit Size</th>
+              </tr>
+            </thead>
+            <tbody>
               {items.length > 0 ? (
                 items.map(item => (
-                  <li key={item.id}>
-                    {item.name} - Current Stock: {item.currentStock}
-                  </li>
+                  <tr key={item.id}>
+                    <td>{item.name}</td>
+                    <td>{item.currentStock}</td>
+                    <td>{item.defaultUnitSize} {item.unit}</td>
+                  </tr>
                 ))
               ) : (
-                <li>No items available</li>
+                <tr>
+                  <td colSpan="4">No items available</td>
+                </tr>
               )}
-            </ul>
-          </li>
-        ))}
-      </ul>
+            </tbody>
+          </table>
+        </div>
+      ))}
     </div>
   );
 }

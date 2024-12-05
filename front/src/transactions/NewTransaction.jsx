@@ -38,22 +38,22 @@ function NewTransaction({ user }) {
 
   const handleSave = async () => {
     try {
-        const payload = {
-            transactionItems: selectedItems.map(item => ({
-                itemId: item.itemId,
-                amount: Number(item.amount)
-            }))
-        };
-        const response = await apiRequest('Transaction', user.token, payload, 'POST');
-        navigate('/home');
+      const payload = {
+        transactionItems: selectedItems.map(item => ({
+          itemId: item.itemId,
+          amount: Number(item.amount)
+        }))
+      };
+      await apiRequest('Transaction', user.token, payload, 'POST');
+      navigate('/home');
     } catch (err) {
-        setError('Failed to save transaction');
-        console.error(err);
+      setError('Failed to save transaction');
+      console.error(err);
     }
   };
 
   return (
-    <div>
+    <div className='showItems'>
       <h1>New Transaction</h1>
       {error && <p className="error">{error}</p>}
       <input
@@ -62,27 +62,53 @@ function NewTransaction({ user }) {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <ul>
-        {items.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase())).map(item => (
-          <li key={item.id}>
-            {item.name}
-            <button onClick={() => handleAddItem(item)}>Add</button>
-          </li>
-        ))}
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Current Stock</th>
+            <th>Unit Size</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase())).map(item => (
+            <tr key={item.id}>
+              <td>{item.name}</td>
+              <td>{item.currentStock}</td>
+              <td>{item.defaultUnitSize} {item.unit}</td>
+              <td>{item.price !== undefined ? `$${item.price.toFixed(2)}` : 'N/A'}</td>
+              <td>
+                <button onClick={() => handleAddItem(item)}>Add</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <h2>Selected Items</h2>
-      <ul>
-        {selectedItems.map(item => (
-          <li key={item.itemId}>
-            {item.itemName}
-            <input
-              type="number"
-              value={item.amount}
-              onChange={(e) => handleAmountChange(item.itemId, e.target.value)}
-            />
-          </li>
-        ))}
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {selectedItems.map(item => (
+            <tr key={item.itemId}>
+              <td>{item.itemName}</td>
+              <td>
+                <input
+                  type="number"
+                  value={item.amount}
+                  onChange={(e) => handleAmountChange(item.itemId, e.target.value)}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <button onClick={handleSave}>Save Transaction</button>
     </div>
   );

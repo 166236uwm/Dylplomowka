@@ -6,6 +6,7 @@ public class ItemDto
     public float DefaultUnitSize { get; set; }
     public string Unit { get; set; } = string.Empty;
     public float CurrentStock { get; set; }
+    public float Price { get; set; }
 }
 
 public class CreateItemDto

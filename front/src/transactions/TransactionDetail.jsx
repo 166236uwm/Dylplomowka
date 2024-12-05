@@ -53,40 +53,34 @@ function TransactionDetails({ user }) {
         <strong>Created At:</strong> {new Date(transaction.createdAt).toLocaleString()}
       </p>
       <p>
-        <strong>Username:</strong> {transaction.username || 'Unknown'}
-      </p>
-      <p>
         <strong>Total Price:</strong> ${transaction.totalPrice.toFixed(2)}
       </p>
       <h2>Items</h2>
-      <ul>
-        {transaction.transactionItems.map(item => {
-          const itemDetails = items[item.itemId];
-          return (
-            <li key={item.itemId}>
-              <p>
-                <strong>Item ID:</strong> {item.itemId}
-              </p>
-              <p>
-                <strong>Amount:</strong> {item.amount}
-              </p>
-              {itemDetails && (
-                <>
-                  <p>
-                    <strong>Item Name:</strong> {itemDetails.name}
-                  </p>
-                  <p>
-                    <strong>Unit Size:</strong> {itemDetails.defaultUnitSize}
-                  </p>
-                  <p>
-                    <strong>Price:</strong> ${itemDetails.price.toFixed(2)}
-                  </p>
-                </>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Item ID</th>
+            <th>Item Name</th>
+            <th>Unit Size</th>
+            <th>Amount</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {transaction.transactionItems.map(item => {
+            const itemDetails = items[item.itemId];
+            return (
+              <tr key={item.itemId}>
+                <td>{item.itemId}</td>
+                <td>{itemDetails?.name || 'Loading...'}</td>
+                <td>{itemDetails?.defaultUnitSize || 'Loading...'}</td>
+                <td>{item.amount}</td>
+                <td>${itemDetails?.price.toFixed(2) || 'Loading...'}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }

@@ -24,16 +24,11 @@ public class StockLevelService : IStockLevelService
 
         foreach (var item in items)
         {
-
-            if (item.TransactionItems == null)
+            if (item.TransactionItems == null || !item.TransactionItems.Any())
             {
                 continue;
             }
 
-            if (!item.TransactionItems.Any())
-            {
-                continue;
-            }
             var transactionItemsWithTransaction = item.TransactionItems.Where(ti => ti.Transaction != null).ToList();
             if (!transactionItemsWithTransaction.Any())
             {
@@ -47,6 +42,8 @@ public class StockLevelService : IStockLevelService
             var requiredStock = dailyUsage * ((config.DefaultStockDays + config.LeadTimeDays) * (1 + config.SafetyStock));
 
             Console.WriteLine($"{item.Name}: {requiredStock}");
+
+            item.RequiredStock = (float)requiredStock;
 
             if (item.CurrentStock < requiredStock)
             {

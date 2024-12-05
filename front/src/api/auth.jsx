@@ -9,10 +9,10 @@ export const apiRequest = async (url, token = null, bodyParams = null, method = 
     headers['Authorization'] = token;
   }
 
-  console.log(`Request URL: ${API_URL}/${url}`);
-  console.log(`Request Method: ${method}`);
-  console.log(`Request Headers:`, headers);
-  console.log(`Request Body:`, bodyParams);
+  //console.log(`Request URL: ${API_URL}/${url}`);
+  //console.log(`Request Method: ${method}`);
+  //console.log(`Request Headers:`, headers);
+  //console.log(`Request Body:`, bodyParams);
 
   const response = await fetch(`${API_URL}/${url}`, {
     method: method,
@@ -21,7 +21,7 @@ export const apiRequest = async (url, token = null, bodyParams = null, method = 
   });
 
   const responseText = await response.text();
-  console.log(`Response Text:`, responseText);
+  //console.log(`Response Text:`, responseText);
 
   if (!response.ok) {
     console.error(`Request failed: ${response.statusText}`);

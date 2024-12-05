@@ -9,6 +9,7 @@ const ShowItems = ({ user }) => {
   const [newItemLocation, setNewItemLocation] = useState('');
   const [newItemUnitSize, setNewItemUnitSize] = useState('');
   const [newItemUnit, setNewItemUnit] = useState('');
+  const [newItemPrice, setNewItemPrice] = useState('');
   const [error, setError] = useState(null);
 
   const fetchItems = async () => {
@@ -42,9 +43,10 @@ const ShowItems = ({ user }) => {
         name: newItemName,
         locationId: newItemLocation,
         defaultUnitSize: newItemUnitSize,
-        unit: newItemUnit
+        unit: newItemUnit,
+        price: newItemPrice
       }, 'POST');
-      fetchItems(); // Fetch items again after adding a new item
+      fetchItems();
     } catch (err) {
       setError('Failed to add item');
       console.error(err);
@@ -70,7 +72,8 @@ const ShowItems = ({ user }) => {
         currentStock: movedItem.currentStock,
         locationId: movedItem.locationId,
         defaultUnitSize: movedItem.defaultUnitSize,
-        unit: movedItem.unit
+        unit: movedItem.unit,
+        price: movedItem.price
       }, 'PUT');
     } catch (err) {
       setError('Failed to update item location');
@@ -79,7 +82,7 @@ const ShowItems = ({ user }) => {
   };
 
   return (
-    <div>
+    <div className='showItems'>
       <h1>Items</h1>
       {error && <p>{error}</p>}
       <div>
@@ -112,6 +115,12 @@ const ShowItems = ({ user }) => {
           onChange={(e) => setNewItemUnit(e.target.value)}
           placeholder="Unit"
         />
+        <input
+          type="number"
+          value={newItemPrice}
+          onChange={(e) => setNewItemPrice(e.target.value)}
+          placeholder="Price"
+        />
         <button onClick={handleAddItem}>Add Item</button>
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -122,22 +131,37 @@ const ShowItems = ({ user }) => {
               {(provided) => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
                   <h2>{location.name}</h2>
-                  <ul>
-                    {locationItems.length > 0 ? (
-                      locationItems.map((item, index) => (
-                        <Draggable key={`item-${item.id}`} draggableId={item.id.toString()} index={index}>
-                          {(provided) => (
-                            <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                              {item.name} - Current Stock: {item.currentStock} , Unit Size: {item.defaultUnitSize} {item.unit}
-                            </li>
-                          )}
-                        </Draggable>
-                      ))
-                    ) : (
-                      <li>No items available</li>
-                    )}
-                    {provided.placeholder}
-                  </ul>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Current Stock</th>
+                        <th>Unit Size</th>
+                        <th>Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {locationItems.length > 0 ? (
+                        locationItems.map((item, index) => (
+                          <Draggable key={`item-${item.id}`} draggableId={item.id.toString()} index={index}>
+                            {(provided) => (
+                              <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                <td>{item.name}</td>
+                                <td>{item.currentStock}</td>
+                                <td>{item.defaultUnitSize} {item.unit}</td>
+                                <td>{item.price}</td>
+                              </tr>
+                            )}
+                          </Draggable>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="5">No items available</td>
+                        </tr>
+                      )}
+                      {provided.placeholder}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </Droppable>

@@ -3,53 +3,39 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-color: #f3eae8;
+  color: #281207;
 }
 
-.login-container {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
+button {
+  background-color: #e7c63e;
+  transition: border-color 0.4s;
+}
+
+button:hover {
   border-radius: 5px;
+  border: 1px solid #281207;
+  background-color: #f1e871;
 }
 
-.login-container h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.login-container form div {
-  margin-bottom: 10px;
-}
-
-.login-container label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.login-container input {
-  width: 80%;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-
-.login-container button {
+table {
+  border-collapse: collapse;
   width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
 }
 
-.login-container button:hover {
-  background-color: #0056b3;
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
 }
 
 .error {
   color: red;
   text-align: center;
   margin-top: 10px;
+}
+
+.showItems {
+  padding-top: 90vh;
+  padding-bottom: 20vh;
 }

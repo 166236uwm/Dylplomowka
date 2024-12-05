@@ -6,6 +6,7 @@ public class Item
     public required float DefaultUnitSize { get; set; }
     public required string Unit { get; set; }
     public float CurrentStock { get; set; }
+    public float RequiredStock { get; set; }
     public float Price { get; set; }
     public string Status { get; set; } = "available";
 

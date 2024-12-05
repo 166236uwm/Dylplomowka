@@ -80,10 +80,15 @@ public class ItemsController : ControllerBase
     }
     [HttpGet("toOrder")]
     [Authorize(Roles = "Manager, Admin")]
-    public async Task<ActionResult<IEnumerable<Item>>> GetItemsToOrder()
+    public async Task<ActionResult<IEnumerable<object>>> GetItemsToOrder()
     {
         var itemsToOrder = await _context.Items
             .Where(i => i.Status == "toOrder")
+            .Select(i => new
+            {
+                id = i.Id,
+                requiredStock = i.RequiredStock
+            })
             .ToListAsync();
 
         return Ok(itemsToOrder);

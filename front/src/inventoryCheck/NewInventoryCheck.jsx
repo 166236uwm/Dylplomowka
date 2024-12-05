@@ -76,7 +76,7 @@ function NewInventoryCheck({ user }) {
     ) : [];
 
     return (
-        <div>
+        <div className='showItems'>
             <h1>New Inventory Check</h1>
             {error && <p className="error">{error}</p>}
             <input 
@@ -85,27 +85,47 @@ function NewInventoryCheck({ user }) {
                 value={searchTerm} 
                 onChange={(e) => setSearchTerm(e.target.value)} 
             />
-            <ul>
-                {filteredItems.map(item => (
-                    <li key={item.id}>
-                        {item.name}
-                        <button onClick={() => handleAddItem(item)}>Add</button>
-                    </li>
-                ))}
-            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredItems.map(item => (
+                        <tr key={item.id}>
+                            <td>{item.name}</td>
+                            <td>
+                                <button onClick={() => handleAddItem(item)}>Add</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
             <h2>Selected Items</h2>
-            <ul>
-                {selectedItems.map(item => (
-                    <li key={item.itemId}>
-                        Item: {item.itemName}
-                        <input 
-                            type="number" 
-                            value={item.recordedAmount} 
-                            onChange={(e) => handleAmountChange(item.itemId, e.target.value)} 
-                        />
-                    </li>
-                ))}
-            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Recorded Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {selectedItems.map(item => (
+                        <tr key={item.itemId}>
+                            <td>{item.itemName}</td>
+                            <td>
+                                <input 
+                                    type="number" 
+                                    value={item.recordedAmount} 
+                                    onChange={(e) => handleAmountChange(item.itemId, e.target.value)} 
+                                />
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
             <button onClick={handleSave}>Save Inventory Check</button>
             <button onClick={handleBook}>Book Inventory Check</button>
         </div>

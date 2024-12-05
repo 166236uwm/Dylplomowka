@@ -19,7 +19,8 @@ public class ItemService : IItemService
                 CurrentStock = i.CurrentStock,
                 LocationId = i.LocationId,
                 DefaultUnitSize = i.DefaultUnitSize,
-                Unit = i.Unit
+                Unit = i.Unit,
+                Price = i.Price
             })
             .ToListAsync();
     }
@@ -56,7 +57,7 @@ public class ItemService : IItemService
             Location = location,
             DefaultUnitSize = createItemDto.DefaultUnitSize,
             Unit = createItemDto.Unit,
-            CurrentStock = 0 // Initialize CurrentStock to 0 or any default value
+            CurrentStock = 0
         };
 
         _context.Items.Add(item);
@@ -72,7 +73,6 @@ public class ItemService : IItemService
             throw new KeyNotFoundException("Item not found");
         }
 
-        // Update only the necessary fields
         existingItem.LocationId = itemDto.LocationId;
         existingItem.Name = itemDto.Name;
         existingItem.CurrentStock = itemDto.CurrentStock;
@@ -124,7 +124,8 @@ public class ItemService : IItemService
                     i.Name,
                     i.CurrentStock,
                     i.DefaultUnitSize,
-                    i.Unit
+                    i.Unit,
+                    i.Price
                 }).ToList()
             }).ToList();
 

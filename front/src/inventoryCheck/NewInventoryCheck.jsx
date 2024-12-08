@@ -24,7 +24,8 @@ function NewInventoryCheck({ user }) {
     }, [user.token]);
 
     const handleAddItem = (item) => {
-        setSelectedItems(prev => [...prev, { itemId: item.id, itemName: item.name, recordedAmount: 0 }]);
+        setSelectedItems(prev => [...prev, { itemId: item.id, itemName: item.name, recordedAmount: 0, currentStock: item.currentStock }]);
+        setItems(prev => prev.filter(i => i.id !== item.id));
     };
 
     const handleAmountChange = (itemId, amount) => {
@@ -71,9 +72,9 @@ function NewInventoryCheck({ user }) {
         }
     };
 
-    const filteredItems = Array.isArray(items) ? items.filter(item => 
-        item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    ) : [];
+    const filteredItems = items.filter(item => 
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div className='showItems'>
@@ -108,6 +109,7 @@ function NewInventoryCheck({ user }) {
                 <thead>
                     <tr>
                         <th>Item Name</th>
+                        <th>Value in System</th>
                         <th>Recorded Amount</th>
                     </tr>
                 </thead>
@@ -115,6 +117,7 @@ function NewInventoryCheck({ user }) {
                     {selectedItems.map(item => (
                         <tr key={item.itemId}>
                             <td>{item.itemName}</td>
+                            <td>{item.currentStock}</td>
                             <td>
                                 <input 
                                     type="number" 

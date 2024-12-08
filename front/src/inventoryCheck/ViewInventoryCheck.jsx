@@ -1,141 +1,149 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { apiRequest } from '../api/auth';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function ViewInventoryCheck({ user }) {
-  const { id } = useParams();
-  const [inventoryCheck, setInventoryCheck] = useState(null);
-  const [items, setItems] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    const fetchInventoryCheck = async () => {
-      try {
-        const data = await apiRequest(`InventoryCheck/${id}`, user.token, null, 'GET');
-        setInventoryCheck(data);
-      } catch (err) {
-        setError('Failed to fetch inventory check');
-        console.error(err);
-      }
-    };
+    const [items, setItems] = useState([]);
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [error, setError] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
+    const { id } = useParams(); // Get the inventory check ID from the URL
 
     const fetchItems = async () => {
-      try {
-        const fetchedItems = await apiRequest('Items', user.token, null, 'GET');
-        setItems(fetchedItems);
-      } catch (err) {
-        setError('Failed to fetch items');
-        console.error(err);
-      }
+        try {
+            const fetchedItems = await apiRequest('Items', user.token, null, 'GET');
+            setItems(fetchedItems);
+        } catch (err) {
+            setError('Failed to fetch items');
+            console.error(err);
+        }
     };
 
-    fetchInventoryCheck();
-    fetchItems();
-  }, [id, user.token]);
+    const fetchInventoryCheck = async () => {
+        try {
+            const inventoryCheck = await apiRequest(`InventoryCheck/${id}`, user.token, null, 'GET');
+            const addedItems = inventoryCheck.inventoryCheckItems.map(item => ({
+                itemId: item.itemId,
+                itemName: item.item.name,
+                recordedAmount: item.recordedAmount,
+                currentStock: item.item.currentStock
+            }));
+            setSelectedItems(addedItems);
+        } catch (err) {
+            setError('Failed to fetch inventory check');
+            console.error(err);
+        }
+    };
 
-  const handleAmountChange = (itemId, amount) => {
-    setInventoryCheck(prev => ({
-      ...prev,
-      inventoryCheckItems: prev.inventoryCheckItems.map(item =>
-        item.itemId === itemId ? { ...item, recordedAmount: amount } : item
-      )
-    }));
-  };
+    useEffect(() => {
+        fetchItems();
+        fetchInventoryCheck();
+    }, [user.token, id]);
 
-  const handleAddItem = (item) => {
-    setInventoryCheck(prev => ({
-      ...prev,
-      inventoryCheckItems: [...prev.inventoryCheckItems, { itemId: item.id, recordedAmount: 0 }]
-    }));
-  };
+    const handleAddItem = (item) => {
+        setSelectedItems(prev => [...prev, { itemId: item.id, itemName: item.name, recordedAmount: 0, currentStock: item.currentStock }]);
+        setItems(prev => prev.filter(i => i.id !== item.id));
+    };
 
-  const handleSave = async () => {
-    try {
-      const payload = {
-        inventoryCheckItems: inventoryCheck.inventoryCheckItems.map(item => ({
-          id: item.itemId, // Change itemId to id
-          recordedAmount: Number(item.recordedAmount) // Ensure recordedAmount is a number
-        })),
-        status: inventoryCheck.status,
-        checkedAt: inventoryCheck.checkedAt,
-        userId: inventoryCheck.userId
-      };
-      await apiRequest(`InventoryCheck/${id}`, user.token, payload, 'PUT');
-      setInventoryCheck({ ...inventoryCheck, status: 'saved' });
-    } catch (err) {
-      setError('Failed to save inventory check');
-      console.error(err);
-    }
-  };
+    const handleAmountChange = (itemId, amount) => {
+        setSelectedItems(prev => 
+            prev.map(item => 
+                item.itemId === itemId ? { ...item, recordedAmount: amount } : item
+            )
+        );
+    };
 
-  const handleBook = async () => {
-    try {
-      await apiRequest(`InventoryCheck/${id}/book`, user.token, null, 'POST');
-      setInventoryCheck({ ...inventoryCheck, status: 'booked' });
-    } catch (err) {
-      setError('Failed to book inventory check');
-      console.error(err);
-    }
-  };
+    const handleSave = async () => {
+        try {
+            const payload = {
+                inventoryCheckItems: selectedItems.map(item => ({
+                    id: item.itemId,
+                    recordedAmount: Number(item.recordedAmount)
+                })),
+                status: 'saved',
+                checkedAt: new Date().toISOString()
+            };
+            await apiRequest(`InventoryCheck/${id}`, user.token, payload, 'PUT');
+            navigate('/inventory');
+        } catch (err) {
+            setError('Failed to save inventory check');
+            console.error(err);
+        }
+    };
 
-  if (error) {
-    return <p className="error">{error}</p>;
-  }
+    const handleBook = async () => {
+        try {
+            const inventoryCheckId = id;
+            await apiRequest(`InventoryCheck/${inventoryCheckId}/book`, user.token, null, 'POST');
+            navigate('/inventory');
+        } catch (err) {
+            setError('Failed to book inventory check');
+            console.error(err);
+        }
+    };
 
-  if (!inventoryCheck) {
-    return <p>Loading...</p>;
-  }
+    const filteredItems = items.filter(item => 
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-  const filteredItems = items.filter(item =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const getItemName = (itemId) => {
-    const item = items.find(item => item.id === itemId);
-    return item ? item.name : 'Unknown Item';
-  };
-
-  return (
-    <div>
-      <h1>Inventory Check Details</h1>
-      <p>Checked At: {new Date(inventoryCheck.checkedAt).toLocaleString()}</p>
-      <p>Status: {inventoryCheck.status}</p>
-      <ul>
-        {inventoryCheck.inventoryCheckItems.map(item => (
-          <li key={item.itemId}>
-            Item Name: {getItemName(item.itemId)}, Recorded Amount: 
-            <input
-              type="number"
-              value={item.recordedAmount}
-              onChange={(e) => handleAmountChange(item.itemId, e.target.value)}
-              disabled={inventoryCheck.status !== 'saved'}
+    return (
+        <div className='showItems'>
+            <h1>New Inventory Check</h1>
+            {error && <p className="error">{error}</p>}
+            <input 
+                type="text" 
+                placeholder="Search items..." 
+                value={searchTerm} 
+                onChange={(e) => setSearchTerm(e.target.value)} 
             />
-          </li>
-        ))}
-      </ul>
-      {inventoryCheck.status === 'saved' && (
-        <div>
-          <input
-            type="text"
-            placeholder="Search items..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <ul>
-            {filteredItems.map(item => (
-              <li key={item.id}>
-                {item.name}
-                <button onClick={() => handleAddItem(item)}>Add</button>
-              </li>
-            ))}
-          </ul>
-          <button onClick={handleSave}>Save</button>
-          <button onClick={handleBook}>Book</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredItems.map(item => (
+                        <tr key={item.id}>
+                            <td>{item.name}</td>
+                            <td>
+                                <button onClick={() => handleAddItem(item)}>Add</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <h2>Selected Items</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Value in System</th>
+                        <th>Recorded Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {selectedItems.map(item => (
+                        <tr key={item.itemId}>
+                            <td>{item.itemName}</td>
+                            <td>{item.currentStock}</td>
+                            <td>
+                                <input 
+                                    type="number" 
+                                    value={item.recordedAmount} 
+                                    onChange={(e) => handleAmountChange(item.itemId, e.target.value)} 
+                                />
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <button onClick={handleSave}>Save Inventory Check</button>
+            <button onClick={handleBook}>Book Inventory Check</button>
         </div>
-      )}
-    </div>
-  );
+    );
 }
 
 export default ViewInventoryCheck;

@@ -9,12 +9,12 @@ public class ItemsController : ControllerBase
 {
     private readonly IItemService _itemService;
     private readonly ApplicationDbContext _context;
+
     public ItemsController(IItemService itemService, ApplicationDbContext context)
     {
         _itemService = itemService ?? throw new ArgumentNullException(nameof(itemService));
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
-
 
     [HttpGet]
     [Authorize(Roles = "User, Manager, Admin")]
@@ -37,30 +37,19 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<Item>> CreateItem(CreateItemDto createItemDto)
+    [Authorize(Roles = "Manager, Admin")]
+    public async Task<ActionResult<ItemDto>> CreateItem(CreateItemDto createItemDto)
     {
-        var createdItem = await _itemService.CreateItemAsync(createItemDto);
-        return CreatedAtAction(nameof(GetItem), new { id = createdItem.Id }, createdItem);
+        var item = await _itemService.CreateItemAsync(createItemDto);
+        return CreatedAtAction(nameof(GetItem), new { id = item.Id }, item);
     }
 
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Manager, Admin")]
     public async Task<IActionResult> UpdateItem(int id, [FromBody] ItemDto itemDto)
     {
-        try
-        {
-            await _itemService.UpdateItemAsync(id, itemDto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            return Conflict("The item was modified or deleted by another process.");
-        }
+        await _itemService.UpdateItemAsync(id, itemDto);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
@@ -78,6 +67,7 @@ public class ItemsController : ControllerBase
         var groupedItems = await _itemService.GetItemsGroupedByLocationAsync();
         return Ok(groupedItems);
     }
+
     [HttpGet("toOrder")]
     [Authorize(Roles = "Manager, Admin")]
     public async Task<ActionResult<IEnumerable<object>>> GetItemsToOrder()
@@ -93,5 +83,4 @@ public class ItemsController : ControllerBase
 
         return Ok(itemsToOrder);
     }
-
 }

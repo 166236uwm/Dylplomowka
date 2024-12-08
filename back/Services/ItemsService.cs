@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore; // Add this line to resolve the Include method issue
+using Microsoft.EntityFrameworkCore; 
 
 public class ItemService : IItemService
 {
@@ -35,14 +35,7 @@ public class ItemService : IItemService
         return item;
     }
 
-    public async Task<Item> CreateItemAsync(Item item)
-    {
-        _context.Items.Add(item);
-        await _context.SaveChangesAsync();
-        return item;
-    }
-
-    public async Task<Item> CreateItemAsync(CreateItemDto createItemDto)
+    public async Task<ItemDto> CreateItemAsync(CreateItemDto createItemDto)
     {
         var location = await _context.Locations.FindAsync(createItemDto.LocationId);
         if (location == null)
@@ -57,12 +50,24 @@ public class ItemService : IItemService
             Location = location,
             DefaultUnitSize = createItemDto.DefaultUnitSize,
             Unit = createItemDto.Unit,
-            CurrentStock = 0
+            CurrentStock = 0,
+            RequiredStock = 0,
+            Price = createItemDto.Price,
+            Status = "available"
         };
 
         _context.Items.Add(item);
         await _context.SaveChangesAsync();
-        return item;
+
+        return new ItemDto
+        {
+            Id = item.Id,
+            Name = item.Name,
+            LocationId = item.LocationId,
+            DefaultUnitSize = item.DefaultUnitSize,
+            Unit = item.Unit,
+            Price = item.Price
+        };
     }
 
     public async Task UpdateItemAsync(int id, ItemDto itemDto)
@@ -73,11 +78,46 @@ public class ItemService : IItemService
             throw new KeyNotFoundException("Item not found");
         }
 
-        existingItem.LocationId = itemDto.LocationId;
-        existingItem.Name = itemDto.Name;
-        existingItem.CurrentStock = itemDto.CurrentStock;
-        existingItem.DefaultUnitSize = itemDto.DefaultUnitSize;
-        existingItem.Unit = itemDto.Unit;
+        if (itemDto.LocationId.HasValue)
+        {
+            var location = await _context.Locations.FindAsync(itemDto.LocationId.Value);
+            if (location == null)
+            {
+                throw new KeyNotFoundException("Location not found");
+            }
+            existingItem.LocationId = itemDto.LocationId.Value;
+            existingItem.Location = location;
+        }
+
+        if (!string.IsNullOrEmpty(itemDto.Name))
+        {
+            existingItem.Name = itemDto.Name;
+        }
+
+        if (itemDto.CurrentStock.HasValue)
+        {
+            existingItem.CurrentStock = itemDto.CurrentStock.Value;
+        }
+
+        if (itemDto.DefaultUnitSize.HasValue)
+        {
+            existingItem.DefaultUnitSize = itemDto.DefaultUnitSize.Value;
+        }
+
+        if (!string.IsNullOrEmpty(itemDto.Unit))
+        {
+            existingItem.Unit = itemDto.Unit;
+        }
+
+        if (itemDto.Price.HasValue)
+        {
+            existingItem.Price = itemDto.Price.Value;
+        }
+
+        if (!string.IsNullOrEmpty(itemDto.Status))
+        {
+            existingItem.Status = itemDto.Status;
+        }
 
         _context.Entry(existingItem).State = EntityState.Modified;
 

@@ -2,7 +2,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   background-color: #f3eae8;
   color: #281207;
 }
@@ -10,6 +9,7 @@ body {
 button {
   background-color: #e7c63e;
   transition: border-color 0.4s;
+  padding: auto;
 }
 
 button:hover {
@@ -36,6 +36,6 @@ th, td {
 }
 
 .showItems {
-  padding-top: 90vh;
+  padding-top: 10vh;
   padding-bottom: 20vh;
 }

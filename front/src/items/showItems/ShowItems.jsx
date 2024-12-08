@@ -11,6 +11,8 @@ const ShowItems = ({ user }) => {
   const [newItemUnit, setNewItemUnit] = useState('');
   const [newItemPrice, setNewItemPrice] = useState('');
   const [error, setError] = useState(null);
+  const [editingItem, setEditingItem] = useState(null);
+  const [editedItem, setEditedItem] = useState({});
 
   const fetchItems = async () => {
     try {
@@ -51,6 +53,36 @@ const ShowItems = ({ user }) => {
       setError('Failed to add item');
       console.error(err);
     }
+  };
+
+  const handleEditItem = (item) => {
+    setEditingItem(item.id);
+    setEditedItem({ ...item });
+  };
+
+  const handleSaveItem = async () => {
+    try {
+      console.log(editedItem);
+      await apiRequest(`Items/${editedItem.id}`, user.token, {
+        id: editedItem.id,
+        name: editedItem.name,
+        currentStock: editedItem.currentStock,
+        locationId: editedItem.locationId, // Ensure locationId is included
+        defaultUnitSize: editedItem.defaultUnitSize,
+        unit: editedItem.unit,
+        price: editedItem.price
+      }, 'PUT');
+      setEditingItem(null);
+      fetchItems();
+    } catch (err) {
+      setError('Failed to save item');
+      console.error(err);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedItem(prev => ({ ...prev, [name]: value }));
   };
 
   const handleDragEnd = async (result) => {
@@ -138,6 +170,7 @@ const ShowItems = ({ user }) => {
                         <th>Current Stock</th>
                         <th>Unit Size</th>
                         <th>Price</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -146,10 +179,55 @@ const ShowItems = ({ user }) => {
                           <Draggable key={`item-${item.id}`} draggableId={item.id.toString()} index={index}>
                             {(provided) => (
                               <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                <td>{item.name}</td>
-                                <td>{item.currentStock}</td>
-                                <td>{item.defaultUnitSize} {item.unit}</td>
-                                <td>{item.price}</td>
+                                {editingItem === item.id ? (
+                                  <>
+                                    <td>
+                                      <input
+                                        type="text"
+                                        name="name"
+                                        value={editedItem.name}
+                                        onChange={handleInputChange}
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="number"
+                                        name="currentStock"
+                                        value={editedItem.currentStock}
+                                        onChange={handleInputChange}
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="number"
+                                        name="defaultUnitSize"
+                                        value={editedItem.defaultUnitSize}
+                                        onChange={handleInputChange}
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="number"
+                                        name="price"
+                                        value={editedItem.price}
+                                        onChange={handleInputChange}
+                                      />
+                                    </td>
+                                    <td>
+                                      <button onClick={handleSaveItem}>Save</button>
+                                    </td>
+                                  </>
+                                ) : (
+                                  <>
+                                    <td>{item.name}</td>
+                                    <td>{item.currentStock}</td>
+                                    <td>{item.defaultUnitSize} {item.unit}</td>
+                                    <td>{item.price}</td>
+                                    <td>
+                                      <button onClick={() => handleEditItem(item)}>Edit</button>
+                                    </td>
+                                  </>
+                                )}
                               </tr>
                             )}
                           </Draggable>

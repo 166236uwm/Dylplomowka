@@ -63,10 +63,10 @@ public class InventoryCheckService : IInventoryCheckService
             });
         }
 
+
         // Update other properties as needed
         inventoryCheck.Status = checkDto.Status;
         inventoryCheck.CheckedAt = checkDto.CheckedAt;
-        inventoryCheck.UserId = checkDto.UserId;
 
         await _context.SaveChangesAsync();
         return true;

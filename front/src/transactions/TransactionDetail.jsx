@@ -42,28 +42,24 @@ function TransactionDetails({ user }) {
   }
 
   if (!transaction) {
-    return <p>Loading...</p>;
+    return <p>Ładowanie...</p>;
   }
 
   return (
     <div>
-      <h1>Transaction Details</h1>
-      <button onClick={() => navigate(-1)}>Go Back</button>
+      <h1>Szczegóły wysyłki</h1>
+      <button onClick={() => navigate(-1)}>Wróć</button>
       <p>
-        <strong>Created At:</strong> {new Date(transaction.createdAt).toLocaleString()}
+        <strong>Zaksięgowana:</strong> {new Date(transaction.createdAt).toLocaleString()}
       </p>
-      <p>
-        <strong>Total Price:</strong> ${transaction.totalPrice.toFixed(2)}
-      </p>
-      <h2>Items</h2>
+      <h2>Przedmioty</h2>
       <table>
         <thead>
           <tr>
-            <th>Item ID</th>
-            <th>Item Name</th>
-            <th>Unit Size</th>
-            <th>Amount</th>
-            <th>Price</th>
+            <th>ID Przedmiotu</th>
+            <th>Nazwa Przedmiotu</th>
+            <th>Wielkość jednostki</th>
+            <th>Ilość</th>
           </tr>
         </thead>
         <tbody>
@@ -72,10 +68,9 @@ function TransactionDetails({ user }) {
             return (
               <tr key={item.itemId}>
                 <td>{item.itemId}</td>
-                <td>{itemDetails?.name || 'Loading...'}</td>
-                <td>{itemDetails?.defaultUnitSize || 'Loading...'}</td>
+                <td>{itemDetails?.name || 'Ładowanie...'}</td>
+                <td>{itemDetails?.defaultUnitSize || 'Ładowanie...'}</td>
                 <td>{item.amount}</td>
-                <td>${itemDetails?.price.toFixed(2) || 'Loading...'}</td>
               </tr>
             );
           })}

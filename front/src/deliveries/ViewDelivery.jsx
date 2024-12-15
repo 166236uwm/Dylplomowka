@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { apiRequest } from '../api/auth';
 
 function ViewDelivery({ user }) {
@@ -42,25 +42,40 @@ function ViewDelivery({ user }) {
     }
   };
 
+  const getStatusText = (status) => {
+    switch (status) {
+      case 'ordered':
+        return 'zamówiono';
+      case 'saved':
+        return 'do zamówienia';
+      case 'booked':
+        return 'w doręczeniu';
+      case 'shipped':
+        return 'zaksięgowana';
+      default:
+        return status;
+    }
+  };
+
   if (error) {
     return <p className="error">{error}</p>;
   }
 
   if (!delivery) {
-    return <p>Loading...</p>;
+    return <p>Ładowanie...</p>;
   }
 
   return (
     <div className='showItems'>
-      <h1>Delivery Details</h1>
-      <p>Saved At: {new Date(delivery.bookedAt).toLocaleString()}</p>
-      <p>Status: {delivery.status}</p>
-      <h2>Delivered Items</h2>
+      <h1>Szeczgóły dostawy</h1>
+      <p>Zapisana: {new Date(delivery.bookedAt).toLocaleString()}</p>
+      <p>Status: {getStatusText(delivery.status)}</p>
+      <h2>Dostarczone przedmioty</h2>
       <table>
         <thead>
           <tr>
-            <th>Item Name</th>
-            <th>Amount</th>
+            <th>Nazwa</th>
+            <th>Ilość</th>
           </tr>
         </thead>
         <tbody>
@@ -73,10 +88,10 @@ function ViewDelivery({ user }) {
         </tbody>
       </table>
       {delivery.status === 'saved' && (
-        <button onClick={handleOrder}>Place as order</button>
+        <button onClick={handleOrder}>Zamów</button>
       )}
       {delivery.status === 'ordered' && (
-        <button onClick={handleMarkAsShipped}>Mark as Shipped</button>
+        <button onClick={handleMarkAsShipped}>Zaksięguj</button>
       )}
     </div>
   );

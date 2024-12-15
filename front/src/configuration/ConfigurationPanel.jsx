@@ -44,13 +44,13 @@ function ConfigurationPanel({ user }) {
 
     return (
         <div>
-            <h1>Stock Configuration</h1>
+            <h1>Konfiguracja zapasów</h1>
             {error && <p className="error">{error}</p>}
             <div>
-                <h2>Edit Configuration</h2>
+                <h2>Edutuj konfigurację</h2>
                 <p>
                     <label>
-                        Default Stock Days:
+                        Na ile dni zapas:
                         <input
                             type="number"
                             name="defaultStockDays"
@@ -60,7 +60,7 @@ function ConfigurationPanel({ user }) {
                     </label>
                 </p>
                 <p><label>
-                    Lead Time Days:
+                    Docelowy czas od zamówienia do dostawy {"[dni]"}:
                     <input
                         type="number"
                         name="leadTimeDays"
@@ -71,7 +71,7 @@ function ConfigurationPanel({ user }) {
                 </p>
                 <p>
                     <label>
-                        Safety Stock:
+                        Mnożnik zapasu bezpieczeństwa {"[0-1]"}:
                         <input
                             type="number"
                             name="safetyStock"
@@ -80,7 +80,7 @@ function ConfigurationPanel({ user }) {
                         />
                     </label>
                     </p>
-                <button onClick={handleUpdate}>Update</button>
+                <button onClick={handleUpdate}>Aktualizuj</button>
             </div>
         </div>
     );

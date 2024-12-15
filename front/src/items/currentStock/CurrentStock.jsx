@@ -21,7 +21,7 @@ function CurrentStock({ user }) {
 
   return (
     <div className='showItems'>
-      <h1>Current Stock</h1>
+      <h1>Obecny zapas</h1>
       {error && <p className="error">{error}</p>}
       {itemsByLocation.map(({ locationId, locationName, items = [] }) => (
         <div key={locationId}>
@@ -29,9 +29,9 @@ function CurrentStock({ user }) {
           <table>
             <thead>
               <tr>
-                <th>Item Name</th>
-                <th>Current Stock</th>
-                <th>Unit Size</th>
+                <th>Nazwa</th>
+                <th>Obecny zapas</th>
+                <th>Rozmiar jednostki</th>
               </tr>
             </thead>
             <tbody>
@@ -45,7 +45,7 @@ function CurrentStock({ user }) {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4">No items available</td>
+                  <td colSpan="4">Brak dostepnych przemiotów</td>
                 </tr>
               )}
             </tbody>

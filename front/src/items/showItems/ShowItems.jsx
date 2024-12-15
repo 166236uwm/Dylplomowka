@@ -67,7 +67,7 @@ const ShowItems = ({ user }) => {
         id: editedItem.id,
         name: editedItem.name,
         currentStock: editedItem.currentStock,
-        locationId: editedItem.locationId, // Ensure locationId is included
+        locationId: editedItem.locationId,
         defaultUnitSize: editedItem.defaultUnitSize,
         unit: editedItem.unit,
         price: editedItem.price
@@ -115,20 +115,20 @@ const ShowItems = ({ user }) => {
 
   return (
     <div className='showItems'>
-      <h1>Items</h1>
+      <h1>Przedmioty</h1>
       {error && <p>{error}</p>}
       <div>
         <input
           type="text"
           value={newItemName}
           onChange={(e) => setNewItemName(e.target.value)}
-          placeholder="Item Name"
+          placeholder="Nazwa"
         />
         <select
           value={newItemLocation}
           onChange={(e) => setNewItemLocation(e.target.value)}
         >
-          <option value="">Select Location</option>
+          <option value="">Wybierz lokalizację</option>
           {locations.map(location => (
             <option key={location.id} value={location.id}>
               {location.name}
@@ -139,21 +139,21 @@ const ShowItems = ({ user }) => {
           type="number"
           value={newItemUnitSize}
           onChange={(e) => setNewItemUnitSize(e.target.value)}
-          placeholder="Unit Size"
+          placeholder="Rozmiar jednostki"
         />
         <input
           type="text"
           value={newItemUnit}
           onChange={(e) => setNewItemUnit(e.target.value)}
-          placeholder="Unit"
+          placeholder="Jednostka"
         />
         <input
           type="number"
           value={newItemPrice}
           onChange={(e) => setNewItemPrice(e.target.value)}
-          placeholder="Price"
+          placeholder="Cena"
         />
-        <button onClick={handleAddItem}>Add Item</button>
+        <button onClick={handleAddItem}>Dodaj przedmiot</button>
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>
         {locations.map(location => {
@@ -166,11 +166,10 @@ const ShowItems = ({ user }) => {
                   <table>
                     <thead>
                       <tr>
-                        <th>Name</th>
-                        <th>Current Stock</th>
-                        <th>Unit Size</th>
-                        <th>Price</th>
-                        <th>Actions</th>
+                        <th>Nazwa</th>
+                        <th>Obecny zapas</th>
+                        <th>Rozmiar jednostki</th>
+                        <th>Akcje</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -214,7 +213,7 @@ const ShowItems = ({ user }) => {
                                       />
                                     </td>
                                     <td>
-                                      <button onClick={handleSaveItem}>Save</button>
+                                      <button onClick={handleSaveItem}>Zapisz</button>
                                     </td>
                                   </>
                                 ) : (
@@ -222,9 +221,8 @@ const ShowItems = ({ user }) => {
                                     <td>{item.name}</td>
                                     <td>{item.currentStock}</td>
                                     <td>{item.defaultUnitSize} {item.unit}</td>
-                                    <td>{item.price}</td>
                                     <td>
-                                      <button onClick={() => handleEditItem(item)}>Edit</button>
+                                      <button onClick={() => handleEditItem(item)}>Edytuj</button>
                                     </td>
                                   </>
                                 )}
@@ -234,7 +232,7 @@ const ShowItems = ({ user }) => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="5">No items available</td>
+                          <td colSpan="4">Brak dostępnych przedmiotów</td>
                         </tr>
                       )}
                       {provided.placeholder}

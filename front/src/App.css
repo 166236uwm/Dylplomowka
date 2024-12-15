@@ -10,6 +10,7 @@ button {
   background-color: #e7c63e;
   transition: border-color 0.4s;
   padding: auto;
+  margin: 0.1vw;
 }
 
 button:hover {

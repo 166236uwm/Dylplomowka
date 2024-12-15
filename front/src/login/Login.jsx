@@ -14,11 +14,20 @@ function Login({ setUser }) {
     setError('')
 
     try {
-      const data = await apiRequest("User/Login", null, { username, password }, 'POST')
-      setUser(data)
-      navigate('/home')
+      const data = await apiRequest("User/Login", null, { username, password }, 'POST');
+      setUser(data);
+      navigate('/home');
     } catch (err) {
-      setError('Invalid username or password')
+      if (err.response && err.response.status === 401) {
+        setError('Nieprawidłowa nazwa użytownika lub hasło.');
+      } else if (err.response && err.response.status === 400) {
+        setError('Nieprawidłowe dane logowania.');
+      } else if (err.response && err.response.status === 500) {
+        setError('Błąd serwera. Spróbuj ponownie.');
+      } else {
+        setError('Nieznany błąd.');
+      }
+      console.error('Login error:', err);
     }
   }
 
@@ -27,7 +36,7 @@ function Login({ setUser }) {
       <h1>Login</h1>
       <form onSubmit={handleLogin}>
         <div>
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="username">Nazwa Użytkownika:</label>
           <input
             type="text"
             id="username"
@@ -37,7 +46,7 @@ function Login({ setUser }) {
           />
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="password">Hasło:</label>
           <input
             type="password"
             id="password"
@@ -46,7 +55,7 @@ function Login({ setUser }) {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Zaloguj</button>
       </form>
       {error && <p className="error">{error}</p>}
     </div>

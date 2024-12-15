@@ -41,34 +41,34 @@ function Deliveries({ user }) {
 
   return (
     <div>
-      <h1>Deliveries</h1>
+      <h1>Dostawy</h1>
       {error && <p className="error">{error}</p>}
-      <button onClick={handleNewDelivery}>New Delivery</button>
-      <h2>Saved Deliveries</h2>
+      <button onClick={handleNewDelivery}>Nowa dostawa</button>
+      <h2>Zapisane dostawy</h2>
       <ul>
         {savedDeliveries.map(delivery => (
           <li key={delivery.id}>
-            Booked At: {new Date(delivery.bookedAt).toLocaleString()}
-            <button onClick={() => navigate(`/deliveries/${delivery.id}`)}>View</button>
+            Zapisana: {new Date(delivery.bookedAt).toLocaleString()}
+            <button onClick={() => navigate(`/deliveries/${delivery.id}`)}>Szczegóły</button>
           </li>
         ))}
       </ul>
-      <h2>Ordered Deliveries</h2>
+      <h2>Nadchodzące dostawy</h2>
       <ul>
         {orderedDeliveries.map(delivery => (
           <li key={delivery.id}>
-            Booked At: {new Date(delivery.bookedAt).toLocaleString()}
-            <button onClick={() => navigate(`/deliveries/${delivery.id}`)}>View</button>
-            <button onClick={() => handleMarkAsShipped(delivery.id)}>Mark as Shipped</button>
+            Zaksięgowano: {new Date(delivery.bookedAt).toLocaleString()}
+            <button onClick={() => navigate(`/deliveries/${delivery.id}`)}>Szczegóły</button>
+            <button onClick={() => handleMarkAsShipped(delivery.id)}>Zaznacz jako przyjętą</button>
           </li>
         ))}
       </ul>
-      <h2>Shipped Deliveries</h2>
+      <h2>Dostarczone dostawy</h2>
       <ul>
         {shippedDeliveries.map(delivery => (
           <li key={delivery.id}>
-            Delivered At: {new Date(delivery.deliveredAt).toLocaleString()}
-            <button onClick={() => navigate(`/deliveries/${delivery.id}`)}>View</button>
+            Dostarczona: {new Date(delivery.deliveredAt).toLocaleString()}
+            <button onClick={() => navigate(`/deliveries/${delivery.id}`)}>Szczegóły</button>
           </li>
         ))}
       </ul>

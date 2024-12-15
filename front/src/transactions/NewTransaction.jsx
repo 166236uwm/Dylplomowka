@@ -54,22 +54,21 @@ function NewTransaction({ user }) {
 
   return (
     <div className='showItems'>
-      <h1>New Transaction</h1>
+      <h1>Nowa wysyłka</h1>
       {error && <p className="error">{error}</p>}
       <input
         type="text"
-        placeholder="Search items..."
+        placeholder="Szukaj..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <table>
         <thead>
           <tr>
-            <th>Item Name</th>
-            <th>Current Stock</th>
-            <th>Unit Size</th>
-            <th>Price</th>
-            <th>Actions</th>
+            <th>Nazwa Przedmiotu</th>
+            <th>Obeacny Zapas</th>
+            <th>Wielkość Jednostki</th>
+            <th>Akcje</th>
           </tr>
         </thead>
         <tbody>
@@ -78,20 +77,19 @@ function NewTransaction({ user }) {
               <td>{item.name}</td>
               <td>{item.currentStock}</td>
               <td>{item.defaultUnitSize} {item.unit}</td>
-              <td>{item.price !== undefined ? `$${item.price.toFixed(2)}` : 'N/A'}</td>
               <td>
-                <button onClick={() => handleAddItem(item)}>Add</button>
+                <button onClick={() => handleAddItem(item)}>Dodaj</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <h2>Selected Items</h2>
+      <h2>Wybrane Przedmioty</h2>
       <table>
         <thead>
           <tr>
-            <th>Item Name</th>
-            <th>Amount</th>
+            <th>Nazwa przedmiotu</th>
+            <th>Ilość</th>
           </tr>
         </thead>
         <tbody>
@@ -109,7 +107,7 @@ function NewTransaction({ user }) {
           ))}
         </tbody>
       </table>
-      <button onClick={handleSave}>Save Transaction</button>
+      <button onClick={handleSave}>Zapisz wysyłkę</button>
     </div>
   );
 }

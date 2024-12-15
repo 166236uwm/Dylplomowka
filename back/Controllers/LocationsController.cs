@@ -55,4 +55,21 @@ public class LocationsController : ControllerBase
         await _locationService.DeleteLocationAsync(location);
         return NoContent();
     }
+    [HttpPut("api/Location/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> EditLocation(int id, [FromBody] LocationDto locationDto)
+        {
+            var location = await _locationService.GetLocationAsync(id);
+            if (location == null)
+            {
+                return NotFound();
+            }
+
+            location.Name = locationDto.Name;
+            await _locationService.UpdateLocationAsync(location);
+
+            return NoContent();
+        }
+
+
 }

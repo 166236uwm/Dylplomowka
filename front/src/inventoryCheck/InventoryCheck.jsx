@@ -18,7 +18,7 @@ function InventoryCheck({ user }) {
     };
 
     const handleNewInventoryCheck = () => {
-        navigate('/inventory/new'); // Navigate to the new inventory check view
+        navigate('/inventory/new');
     };
 
     useEffect(() => {
@@ -30,32 +30,33 @@ function InventoryCheck({ user }) {
 
     return (
         <div>
-            <h1>Inventory Checks</h1>
+            <h1>Inwentaryzacje</h1>
             {error && <p className="error">{error}</p>}
             {inventoryChecks.length === 0 ? (
-                <p>No previous inventory checks</p>
+                <p>Brak przeszłych inwentaryzacji</p>
             ) : (
                 <>
-                    <h2>Saved Inventory Checks</h2>
+                    <h2>Zapisane inwentaryzacje</h2>
                     <ul>
                         {savedChecks.map(check => (
                             <li key={check.id}>
-                                Checked At: {new Date(check.checkedAt).toLocaleString()}
-                                <button onClick={() => navigate(`/inventory/${check.id}`)}>View</button>
+                                Zapisana: {new Date(check.checkedAt).toLocaleString()}
+                                <button onClick={() => navigate(`/inventory/${check.id}`)}>Szczegóły</button>
                             </li>
                         ))}
                     </ul>
-                    <h2>Booked Inventory Checks</h2>
+                    <h2>Zaksięgowane Inwentaryzacje</h2>
                     <ul>
                         {bookedChecks.map(check => (
                             <li key={check.id}>
-                                Checked At: {new Date(check.checkedAt).toLocaleString()}
+                                Zaksięgowana: {new Date(check.checkedAt).toLocaleString()}
+                                <button onClick={() => navigate(`/inventory/${check.id}`)}>Szczegóły</button>
                             </li>
                         ))}
                     </ul>
                 </>
             )}
-            <button onClick={handleNewInventoryCheck}>New Inventory Check</button>
+            <button onClick={handleNewInventoryCheck}>Nowa Inwentaryzacja</button>
         </div>
     );
 }

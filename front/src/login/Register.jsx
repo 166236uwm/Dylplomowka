@@ -32,10 +32,10 @@ function Register() {
 
     return (
         <div className="register-container">
-            <h1>Register</h1>
+            <h1>Zarejestruj użytkownika</h1>
             <form onSubmit={handleRegister}>
                 <div>
-                    <label htmlFor="username">Username:</label>
+                    <label htmlFor="username">Nazwa Użytkownika:</label>
                     <input
                         type="text"
                         id="username"
@@ -45,7 +45,7 @@ function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="name">Name:</label>
+                    <label htmlFor="name">Imię:</label>
                     <input
                         type="text"
                         id="name"
@@ -55,7 +55,7 @@ function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="surname">Surname:</label>
+                    <label htmlFor="surname">Nazwisko:</label>
                     <input
                         type="text"
                         id="surname"
@@ -75,7 +75,7 @@ function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="password">Password:</label>
+                    <label htmlFor="password">Hasło:</label>
                     <input
                         type="password"
                         id="password"
@@ -85,7 +85,7 @@ function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="repeatPassword">Repeat Password:</label>
+                    <label htmlFor="repeatPassword">Powtórz hasło:</label>
                     <input
                         type="password"
                         id="repeatPassword"
@@ -94,7 +94,7 @@ function Register() {
                         required
                     />
                 </div>
-                <button type="submit">Register</button>
+                <button type="submit">Zarejestruj</button>
             </form>
             {error && <p className="error">{error}</p>}
         </div>

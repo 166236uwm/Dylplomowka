@@ -54,43 +54,25 @@ function NewInventoryCheck({ user }) {
         }
     };
 
-    const handleBook = async () => {
-        try {
-            const payload = {
-                inventoryCheckItems: selectedItems.map(item => ({
-                    id: item.itemId,
-                    recordedAmount: Number(item.recordedAmount)
-                }))
-            };
-            const response = await apiRequest('InventoryCheck', user.token, payload, 'POST');
-            const inventoryCheckId = response.id;
-            await apiRequest(`InventoryCheck/${inventoryCheckId}/book`, user.token, null, 'POST');
-            navigate('/inventory');
-        } catch (err) {
-            setError('Failed to book inventory check');
-            console.error(err);
-        }
-    };
-
     const filteredItems = items.filter(item => 
         item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <div className='showItems'>
-            <h1>New Inventory Check</h1>
+            <h1>Nowa Inwentaryzacja</h1>
             {error && <p className="error">{error}</p>}
             <input 
                 type="text" 
-                placeholder="Search items..." 
+                placeholder="Szukaj..." 
                 value={searchTerm} 
                 onChange={(e) => setSearchTerm(e.target.value)} 
             />
             <table>
                 <thead>
                     <tr>
-                        <th>Item Name</th>
-                        <th>Actions</th>
+                        <th>Nazwa</th>
+                        <th>Akcje</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -98,19 +80,19 @@ function NewInventoryCheck({ user }) {
                         <tr key={item.id}>
                             <td>{item.name}</td>
                             <td>
-                                <button onClick={() => handleAddItem(item)}>Add</button>
+                                <button onClick={() => handleAddItem(item)}>Dodaj</button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            <h2>Selected Items</h2>
+            <h2>Wybrane Przedmioty</h2>
             <table>
                 <thead>
                     <tr>
-                        <th>Item Name</th>
-                        <th>Value in System</th>
-                        <th>Recorded Amount</th>
+                        <th>Nazwa</th>
+                        <th>Ilość teoretyczna</th>
+                        <th>Ilość Rzeczywista</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -129,8 +111,7 @@ function NewInventoryCheck({ user }) {
                     ))}
                 </tbody>
             </table>
-            <button onClick={handleSave}>Save Inventory Check</button>
-            <button onClick={handleBook}>Book Inventory Check</button>
+            <button onClick={handleSave}>Zapisz inwentaryzację</button>
         </div>
     );
 }

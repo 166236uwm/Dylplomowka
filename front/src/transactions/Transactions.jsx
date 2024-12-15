@@ -23,15 +23,14 @@ function Transactions({ user }) {
 
   return (
     <div>
-      <h1>Transactions</h1>
+      <h1>Wysyłki</h1>
       {error && <p className="error">{error}</p>}
       <table>
         <thead>
           <tr>
-            <th>Created At</th>
-            <th>Username</th>
-            <th>Total Price</th>
-            <th>Actions</th>
+            <th>Zaksięgowana</th>
+            <th>Nazwa użytkownika</th>
+            <th>Akcje</th>
           </tr>
         </thead>
         <tbody>
@@ -39,9 +38,8 @@ function Transactions({ user }) {
             <tr key={transaction.id}>
               <td>{new Date(transaction.createdAt).toLocaleString()}</td>
               <td>{transaction.username}</td>
-              <td>${transaction.totalPrice.toFixed(2)}</td>
               <td>
-                <button onClick={() => navigate(`/transaction/${transaction.id}`)}>View Details</button>
+                <button onClick={() => navigate(`/transaction/${transaction.id}`)}>Zobacz szczegóły</button>
               </td>
             </tr>
           ))}

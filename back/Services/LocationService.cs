@@ -40,4 +40,9 @@ public class LocationService : ILocationService
         _context.Locations.Remove(location);
         await _context.SaveChangesAsync();
     }
+    public async Task UpdateLocationAsync(Location location)
+    {
+        _context.Locations.Update(location);
+        await _context.SaveChangesAsync();
+    }
 }

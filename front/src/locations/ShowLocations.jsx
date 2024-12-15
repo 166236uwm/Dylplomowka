@@ -7,6 +7,8 @@ function ShowLocations({ user }) {
   const [error, setError] = useState('');
   const [expandedLocation, setExpandedLocation] = useState(null);
   const [newLocationName, setNewLocationName] = useState('');
+  const [editLocationId, setEditLocationId] = useState(null);
+  const [editLocationName, setEditLocationName] = useState('');
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -57,29 +59,67 @@ function ShowLocations({ user }) {
   const handleExpandLocation = (locationId) => {
     setExpandedLocation(expandedLocation === locationId ? null : locationId);
   };
-//TODO: fix expanding locations - either use grouped by location, or investigate passing items when location is requested
+
+  const handleEditLocation = (id, name) => {
+    setEditLocationId(id);
+    setEditLocationName(name);
+  };
+
+  const handleCancelEdit = () => {
+    setEditLocationId(null);
+    setEditLocationName('');
+  };
+
+  const handleSubmitEdit = async () => {
+    try {
+      await apiRequest(`Location/${editLocationId}`, user.token, { id:editLocationId, name: editLocationName }, 'PUT');
+      setLocations(locations.map(location => 
+        location.id === editLocationId ? { ...location, name: editLocationName } : location
+      ));
+      setEditLocationId(null);
+      setEditLocationName('');
+    } catch (error) {
+      setError('Failed to update location');
+    }
+  };
+
   return (
     <div>
-      <h1>Locations List</h1>
+      <h1>Lista Lokalizacji</h1>
       {error && <p className="error">{error}</p>}
       <div>
         <input
           type="text"
           value={newLocationName}
           onChange={(e) => setNewLocationName(e.target.value)}
-          placeholder="New Location Name"
+          placeholder="Nazwa nowej lokalizacji"
         />
-        <button onClick={handleAddLocation}>Add Location</button>
+        <button onClick={handleAddLocation}>Dodaj Lokalizację</button>
       </div>
       <ul id="locations-list">
         {locations.map(location => (
           <li key={location.id} className="location-card">
             <div>
-              {location.name}
-              <button onClick={() => handleDeleteLocation(location.id)}>Delete</button>
-              <button onClick={() => handleExpandLocation(location.id)}>
-                {expandedLocation === location.id ? 'Collapse' : 'Expand'}
-              </button>
+              {editLocationId === location.id ? (
+                <>
+                  <input
+                    type="text"
+                    value={editLocationName}
+                    onChange={(e) => setEditLocationName(e.target.value)}
+                  />
+                  <button onClick={handleSubmitEdit}>Zatwierdź</button>
+                  <button onClick={handleCancelEdit}>Anuluj</button>
+                </>
+              ) : (
+                <>
+                  {location.name}
+                  <button onClick={() => handleDeleteLocation(location.id)}>Usuń</button>
+                  <button onClick={() => handleExpandLocation(location.id)}>
+                    {expandedLocation === location.id ? 'Zwiń' : 'Rozwiń'}
+                  </button>
+                  <button onClick={() => handleEditLocation(location.id, location.name)}>Edytuj</button>
+                </>
+              )}
             </div>
             {expandedLocation === location.id && (
               <ul>
@@ -89,11 +129,11 @@ function ShowLocations({ user }) {
                     itemGroup.items.length > 0 ? (
                       itemGroup.items.map(item => (
                         <li key={item.id}>
-                          {item.name} - Current Stock: {item.currentStock}
+                          {item.name} - Obecny Zapas: {item.currentStock}
                         </li>
                       ))
                     ) : (
-                      <li key="no-items">No items available</li>
+                      <li key="no-items">Brak dostępnych przedmiotów</li>
                     )
                   ))
                 }

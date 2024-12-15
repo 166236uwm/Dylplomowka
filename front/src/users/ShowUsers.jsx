@@ -53,16 +53,16 @@ function ShowUsers({ user }) {
 
   return (
     <div>
-      <h1>Users List</h1>
-      <button onClick={handleAddUser}>Add User</button>
+      <h1>Lista Użytkowników</h1>
+      <button onClick={handleAddUser}>Dodaj użytkownika</button>
       <select
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
       >
-        <option value="">Filter by role</option>
+        <option value="">Filtruj według roli</option>
         <option value="Admin">Admin</option>
         <option value="Manager">Manager</option>
-        <option value="User">User</option>
+        <option value="User">Użytkownik</option>
       </select>
       <div id="users-list">
         {filteredUsers.map(user => (
@@ -74,9 +74,9 @@ function ShowUsers({ user }) {
             >
               <option value="Admin">Admin</option>
               <option value="Manager">Manager</option>
-              <option value="User">User</option>
+              <option value="User">Użytkownik</option>
             </select>
-            <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
+            <button onClick={() => handleDeleteUser(user.id)}>Usuń</button>
           </div>
         ))}
       </div>

@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <header className="header">
-      <button className="home-button" onClick={handleHomeClick}>Home</button>
+      <button className="home-button" onClick={handleHomeClick}>Ekran główny</button>
     </header>
   );
 };

@@ -4,7 +4,6 @@ function HomePage({ user }) {
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    // Clear user data and redirect to login
     navigate('/login')
   }
 
@@ -13,28 +12,28 @@ function HomePage({ user }) {
       case 'Admin':
         return (
           <>
-            <button onClick={() => navigate('/show-items')}>Show Items</button>
-            <button onClick={() => navigate('/show-locations')}>Show Locations</button>
-            <button onClick={() => navigate('/show-users')}>Show Users</button>
-            <button onClick={() => navigate('/transactions')}>View Transactions</button>
-            <button onClick={() => navigate('/configuration')}>Configuration</button>
+            <button onClick={() => navigate('/show-items')}>Pokaż przedmioty</button>
+            <button onClick={() => navigate('/show-locations')}>Pokaż lokalizacje</button>
+            <button onClick={() => navigate('/show-users')}>Pokaż użytkowników</button>
+            <button onClick={() => navigate('/transactions')}>Pokaż wysyłki</button>
+            <button onClick={() => navigate('/configuration')}>Konfiguracja magazynu</button>
           </>
         )
       case 'Manager':
         return (
           <>
-            <button onClick={() => navigate('/inventory')}>Book Inventory</button>
-            <button onClick={() => navigate('/current-stock')}>Current Stock</button>
-            <button onClick={() => navigate('/deliveries')}>Deliveries</button>
-            <button onClick={() => navigate('/transactions')}>View Transactions</button>
+            <button onClick={() => navigate('/inventory')}>Inwentaryzacje</button>
+            <button onClick={() => navigate('/current-stock')}>Obecny zapas</button>
+            <button onClick={() => navigate('/deliveries')}>Dostawy</button>
+            <button onClick={() => navigate('/transactions')}>Pokaż wysyłki</button>
 
           </>
         )
       case 'User':
         return (
           <>
-          <button onClick={() => navigate('/current-stock')}>Current Stock</button>
-          <button onClick={() => navigate('/transactions/new')}>New Transaction</button>
+          <button onClick={() => navigate('/current-stock')}>Obecny zapas</button>
+          <button onClick={() => navigate('/transactions/new')}>Nowa wysyłka</button>
           </>
         )
       default:
@@ -44,11 +43,11 @@ function HomePage({ user }) {
 
   return (
     <div className="home-container">
-      <h1>Welcome, {user.username}!</h1>
+      <h1>Witaj, {user.username}!</h1>
       <div className="menu">
         {renderMenu()}
       </div>
-      <button onClick={handleLogout}>Logout</button>
+      <button onClick={handleLogout}>Wyloguj</button>
     </div>
   )
 }

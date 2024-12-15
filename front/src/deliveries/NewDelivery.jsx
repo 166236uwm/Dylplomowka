@@ -78,22 +78,22 @@ function NewDelivery({ user }) {
 
   return (
     <div className='showItems'>
-      <h1>New Delivery</h1>
+      <h1>Nowa dostawa</h1>
       {error && <p className="error">{error}</p>}
       <input
         type="text"
-        placeholder="Search items..."
+        placeholder="Szukaj..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <table>
         <thead>
           <tr>
-            <th>Item Name</th>
-            <th>Current Stock</th>
-            <th>Required Stock</th>
-            <th>To Order</th>
-            <th>Actions</th>
+            <th>Nazwa</th>
+            <th>Obecny zapas </th>
+            <th>Wymagany zapas</th>
+            <th>Zamówić</th>
+            <th>Akcje</th>
           </tr>
         </thead>
         <tbody>
@@ -104,19 +104,19 @@ function NewDelivery({ user }) {
               <td>{Math.round(getRequiredStock(item.id))}</td>
               <td>{Math.round(getToOrder(item.id, item.currentStock))}</td>
               <td>
-                <button onClick={() => handleAddItem(item)}>Add</button>
+                <button onClick={() => handleAddItem(item)}>Dodaj</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <h2>Selected Items</h2>
+      <h2>Wybrane przedmioty</h2>
       <table>
         <thead>
           <tr>
-            <th>Item Name</th>
-            <th>Current Stock</th>
-            <th>Amount</th>
+            <th>Nazwa</th>
+            <th>Obecny zapas</th>
+            <th>Ilość</th>
           </tr>
         </thead>
         <tbody>
@@ -135,7 +135,7 @@ function NewDelivery({ user }) {
           ))}
         </tbody>
       </table>
-      <button onClick={handleSave}>Save Delivery</button>
+      <button onClick={handleSave}>Zapisz dostawę</button>
     </div>
   );
 }

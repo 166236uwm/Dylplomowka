@@ -67,7 +67,7 @@ function ViewDelivery({ user }) {
 
   return (
     <div className='showItems'>
-      <h1>Szeczgóły dostawy</h1>
+      <h1>Szczegóły dostawy</h1>
       <p>Zapisana: {new Date(delivery.bookedAt).toLocaleString()}</p>
       <p>Status: {getStatusText(delivery.status)}</p>
       <h2>Dostarczone przedmioty</h2>

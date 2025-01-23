@@ -1,4 +1,4 @@
-const API_URL = 'https://r1hskpc2-5140.euw.devtunnels.ms/api';
+const API_URL = 'http://localhost:5140/api';
 
 export const apiRequest = async (url, token = null, bodyParams = null, method = 'GET') => {
   const headers = {

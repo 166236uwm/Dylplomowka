@@ -60,9 +60,9 @@ function ShowUsers({ user }) {
         onChange={(e) => setFilter(e.target.value)}
       >
         <option value="">Filtruj według roli</option>
-        <option value="Admin">Admin</option>
-        <option value="Manager">Manager</option>
-        <option value="User">Użytkownik</option>
+        <option value="Admin">Kierownik</option>
+        <option value="Manager">Młodszy Kierownik</option>
+        <option value="User">Pracownik</option>
       </select>
       <div id="users-list">
         {filteredUsers.map(user => (
@@ -72,9 +72,9 @@ function ShowUsers({ user }) {
               value={user.role}
               onChange={(e) => handleRoleChange(user.id, e.target.value)}
             >
-              <option value="Admin">Admin</option>
-              <option value="Manager">Manager</option>
-              <option value="User">Użytkownik</option>
+              <option value="Admin">Kierownik</option>
+              <option value="Manager">Młodszy Kierownik</option>
+              <option value="User">Pracownik</option>
             </select>
             <button onClick={() => handleDeleteUser(user.id)}>Usuń</button>
           </div>
